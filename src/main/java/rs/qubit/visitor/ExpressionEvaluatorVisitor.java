@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
 
-    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, BooleanValue>> EQUALS_OPERATIONS;
-    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, BooleanValue>> GREATER_THAN_OPERATIONS;
+    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, Boolean>> EQUALS_OPERATIONS;
+    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, Boolean>> GREATER_THAN_OPERATIONS;
 
     public ExpressionEvaluatorVisitor() {
         EQUALS_OPERATIONS = Map.of(
@@ -30,40 +30,40 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         );
     }
 
-    private BooleanValue integerGreaterThan(Value left, Value right) {
+    private Boolean integerGreaterThan(Value left, Value right) {
         assert left instanceof IntegerValue;
         assert right instanceof IntegerValue;
-        return new BooleanValue(((IntegerValue) left).getValue() > ((IntegerValue) right).getValue());
+        return ((IntegerValue) left).getValue() > ((IntegerValue) right).getValue();
     }
 
-    private BooleanValue dateGreaterThan(Value left, Value right) {
+    private Boolean dateGreaterThan(Value left, Value right) {
         assert left instanceof DateValue;
         assert right instanceof DateValue;
-        return new BooleanValue(((DateValue) left).getValue().compareTo(((DateValue) right).getValue()) > 0);
+        return ((DateValue) left).getValue().compareTo(((DateValue) right).getValue()) > 0;
     }
 
-    private BooleanValue booleanEquals(Value left, Value right) {
+    private Boolean booleanEquals(Value left, Value right) {
         assert left instanceof BooleanValue;
         assert right instanceof BooleanValue;
-        return new BooleanValue(((BooleanValue) left).isValue() == ((BooleanValue) right).isValue());
+        return ((BooleanValue) left).isValue() == ((BooleanValue) right).isValue();
     }
 
-    private BooleanValue integerEquals(Value left, Value right) {
+    private Boolean integerEquals(Value left, Value right) {
         assert left instanceof IntegerValue;
         assert right instanceof IntegerValue;
-        return new BooleanValue(((IntegerValue) left).getValue() == ((IntegerValue) right).getValue());
+        return ((IntegerValue) left).getValue() == ((IntegerValue) right).getValue();
     }
 
-    private BooleanValue stringEquals(Value left, Value right) {
+    private Boolean stringEquals(Value left, Value right) {
         assert left instanceof StringValue;
         assert right instanceof StringValue;
-        return new BooleanValue(((StringValue) left).getValue().equals(((StringValue) right).getValue()));
+        return ((StringValue) left).getValue().equals(((StringValue) right).getValue());
     }
 
-    private BooleanValue dateEquals(Value left, Value right) {
+    private Boolean dateEquals(Value left, Value right) {
         assert left instanceof DateValue;
         assert right instanceof DateValue;
-        return new BooleanValue(((DateValue) left).getValue().equals(((DateValue) right).getValue()));
+        return ((DateValue) left).getValue().equals(((DateValue) right).getValue());
     }
 
 
@@ -121,7 +121,7 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         var right = equalsNode.getRight().accept(this, tArg);
 
         return Optional.ofNullable(EQUALS_OPERATIONS.get(Pair.of(left.getClass(), right.getClass())))
-                .map(operation -> operation.apply(left, right))
+                .map(operation -> new BooleanValue(operation.apply(left, right)))
                 .orElseThrow(() -> new IllegalArgumentException("Unsupported types for equals operation"));
     }
 
@@ -159,7 +159,7 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         var right = greaterThanExpression.getRight().accept(this, tArg);
 
         return Optional.ofNullable(GREATER_THAN_OPERATIONS.get(Pair.of(left.getClass(), right.getClass())))
-                .map(operation -> operation.apply(left, right))
+                .map(operation -> new BooleanValue(operation.apply(left, right)))
                 .orElseThrow(() -> new IllegalArgumentException("Unsupported types for greater than operation"));
     }
 }
