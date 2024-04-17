@@ -1,10 +1,13 @@
 package rs.qubit;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import rs.qubit.ast.*;
 import rs.qubit.value.BooleanValue;
 import rs.qubit.visitor.ExpressionEvaluatorVisitor;
 import rs.qubit.visitor.SqlGeneratorVisitor;
 
+import java.beans.Expression;
 import java.util.List;
 
 import static rs.qubit.Query.*;
@@ -28,6 +31,7 @@ public class Main {
     }
 
 
+    @SneakyThrows
     public static void main(String[] args) {
 
         var expressionEvaluatorVisitor = new ExpressionEvaluatorVisitor();
@@ -59,6 +63,12 @@ public class Main {
                         )
                 )
         ));
+
+
+        var serializedFilter = new ObjectMapper().writeValueAsString(filter);
+        System.out.println(serializedFilter);
+
+        var deserializedFilter = new ObjectMapper().readValue(serializedFilter, ExpressionNode.class);
 
 
         var filteredRecords = records
