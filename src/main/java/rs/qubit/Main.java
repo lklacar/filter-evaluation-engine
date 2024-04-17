@@ -35,7 +35,7 @@ public class Main {
         var records = generateRecords();
 
 
-        var filter = and(
+        var filter = not(and(
                 not(
                         like(
                                 column("name"),
@@ -47,9 +47,18 @@ public class Main {
                                 column("age"),
                                 number(100)
                         )
+                ),
+                or(
+                        equal(
+                                column("city"),
+                                string("New York")
+                        ),
+                        equal(
+                                column("city"),
+                                string("Los Angeles")
+                        )
                 )
-
-        );
+        ));
 
 
         var filteredRecords = records
@@ -60,6 +69,7 @@ public class Main {
                 })
                 .toList();
 
+        System.out.println(filter);
 
         System.out.printf("Original records: %d\n", records.size());
         System.out.printf("Filtered records: %d\n", filteredRecords.size());

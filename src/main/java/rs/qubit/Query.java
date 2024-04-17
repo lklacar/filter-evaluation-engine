@@ -47,7 +47,7 @@ public class Query {
         return new GreaterThanExpression(left, right);
     }
 
-    public static EqualsNode equals(ExpressionNode left, ExpressionNode right) {
+    public static EqualsNode equal(ExpressionNode left, ExpressionNode right) {
         return new EqualsNode(left, right);
     }
 
