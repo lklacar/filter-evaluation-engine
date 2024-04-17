@@ -9,7 +9,7 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
         var left = andExpressionNode.getLeft().accept(this, tArg);
         var right = andExpressionNode.getRight().accept(this, tArg);
 
-        return "(" + left + " AND " + right + ")";
+        return "(%s AND %s)".formatted(left, right);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
     public String visit(NotExpression notExpression, Record tArg) {
         var expression = notExpression.getExpression().accept(this, tArg);
 
-        return "(NOT " + expression + ")";
+        return "(NOT %s)".formatted(expression);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
         var left = orExpression.getLeft().accept(this, tArg);
         var right = orExpression.getRight().accept(this, tArg);
 
-        return "(" + left + " OR " + right + ")";
+        return "(%s OR %s)".formatted(left, right);
     }
 
     @Override
@@ -48,12 +48,12 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
         var left = equalsNode.getLeft().accept(this, tArg);
         var right = equalsNode.getRight().accept(this, tArg);
 
-        return left + " = " + right;
+        return "%s = %s".formatted(left, right);
     }
 
     @Override
     public String visit(StringExpression stringExpression, Record tArg) {
-        return "'" + stringExpression.getValue() + "'";
+        return "'%s'".formatted(stringExpression.getValue());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
     public String visit(LikeExpressionNode likeExpressionNode, Record tArg) {
         var left = likeExpressionNode.getLeft().accept(this, tArg);
         var right = likeExpressionNode.getRight().accept(this, tArg);
-        return "(" + left + " LIKE " + right + ")";
+        return "(%s LIKE %s)".formatted(left, right);
     }
 
     @Override
@@ -73,6 +73,6 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
         var left = greaterThanExpression.getLeft().accept(this, tArg);
         var right = greaterThanExpression.getRight().accept(this, tArg);
 
-        return "(" + left + " > " + right + ")";
+        return "(%s > %s)".formatted(left, right);
     }
 }
