@@ -120,9 +120,7 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         var left = equalsNode.getLeft().accept(this, tArg);
         var right = equalsNode.getRight().accept(this, tArg);
 
-        return Optional.ofNullable(EQUALS_OPERATIONS.get(Pair.of(left.getClass(), right.getClass())))
-                .map(operation -> new BooleanValue(operation.apply(left, right)))
-                .orElseThrow(() -> new IllegalArgumentException("Unsupported types for equals operation"));
+        return executeBinaryOperation(EQUALS_OPERATIONS, left, right);
     }
 
     @Override
@@ -158,7 +156,11 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         var left = greaterThanExpression.getLeft().accept(this, tArg);
         var right = greaterThanExpression.getRight().accept(this, tArg);
 
-        return Optional.ofNullable(GREATER_THAN_OPERATIONS.get(Pair.of(left.getClass(), right.getClass())))
+        return executeBinaryOperation(GREATER_THAN_OPERATIONS, left, right);
+    }
+
+    private BooleanValue executeBinaryOperation(Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, Boolean>> operations, Value left, Value right) {
+        return Optional.ofNullable(operations.get(Pair.of(left.getClass(), right.getClass())))
                 .map(operation -> new BooleanValue(operation.apply(left, right)))
                 .orElseThrow(() -> new IllegalArgumentException("Unsupported types for greater than operation"));
     }
