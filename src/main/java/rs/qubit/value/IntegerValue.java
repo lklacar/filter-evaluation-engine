@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @Builder
-public class NumberValue implements Value {
+public final class IntegerValue implements Value {
     private int value;
 
     @Override

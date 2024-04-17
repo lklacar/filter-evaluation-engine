@@ -11,7 +11,7 @@ public interface Visitor<TRet, TEnv> {
 
     TRet visit(NotExpression notExpression, TEnv tArg);
 
-    TRet visit(NumberExpression numberExpression, TEnv tArg);
+    TRet visit(IntegerExpression integerExpression, TEnv tArg);
 
     TRet visit(OrExpression orExpression, TEnv tArg);
 

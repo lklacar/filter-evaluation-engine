@@ -1,41 +1,59 @@
 {
+  "type": "not",
   "expression": {
+    "type": "and",
     "left": {
+      "type": "and",
       "left": {
+        "type": "not",
         "expression": {
+          "type": "like",
           "left": {
+            "type": "column",
             "columnName": "name"
           },
           "right": {
+            "type": "string",
             "value": "%John%"
           }
         }
       },
       "right": {
+        "type": "not",
         "expression": {
+          "type": "greaterThan",
           "left": {
+            "type": "column",
             "columnName": "age"
           },
           "right": {
+            "type": "number",
             "value": 100
           }
         }
       }
     },
     "right": {
+      "type": "or",
       "left": {
+        "type": "equal",
         "left": {
+          "type": "column",
           "columnName": "city"
         },
         "right": {
+          "type": "string",
           "value": "New York"
         }
       },
       "right": {
+        "type": "equal",
         "left": {
+          "type": "column",
           "columnName": "city"
         },
         "right": {
+          "type": "string",
           "value": "Los Angeles"
         }
       }

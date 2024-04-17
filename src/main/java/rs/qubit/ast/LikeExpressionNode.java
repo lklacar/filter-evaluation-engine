@@ -3,11 +3,13 @@ package rs.qubit.ast;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import rs.qubit.visitor.Visitor;
 
 @Data
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class LikeExpressionNode implements ExpressionNode {
 
     private ExpressionNode left;

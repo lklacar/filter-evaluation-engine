@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @Builder
-public class DateValue implements Value {
+public final class DateValue implements Value {
     private Date value;
 
     @Override

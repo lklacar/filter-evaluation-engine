@@ -6,7 +6,8 @@ import rs.qubit.visitor.Visitor;
 @AllArgsConstructor
 @Builder
 @Data
-public class NumberExpression implements ExpressionNode {
+@NoArgsConstructor
+public class IntegerExpression implements ExpressionNode {
     private int value;
 
     @Override

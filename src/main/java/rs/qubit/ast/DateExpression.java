@@ -8,6 +8,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Data
+@NoArgsConstructor
 public class DateExpression implements ExpressionNode {
     private Date date;
 

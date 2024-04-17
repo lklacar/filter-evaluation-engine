@@ -7,7 +7,6 @@ import rs.qubit.value.BooleanValue;
 import rs.qubit.visitor.ExpressionEvaluatorVisitor;
 import rs.qubit.visitor.SqlGeneratorVisitor;
 
-import java.beans.Expression;
 import java.util.List;
 
 import static rs.qubit.Query.*;
@@ -49,7 +48,7 @@ public class Main {
                 not(
                         greaterThan(
                                 column("age"),
-                                number(100)
+                                integer(100)
                         )
                 ),
                 or(
