@@ -7,14 +7,23 @@ import rs.qubit.visitor.SqlGeneratorVisitor;
 
 import java.util.List;
 
+import static rs.qubit.Query.*;
+
 public class Main {
 
     @SuppressWarnings("DataFlowIssue")
     public static List<Record> generateRecords() {
         return List.of(
-            new Record().put("name", "John").put("age", 25).put("city", "New York"),
-            new Record().put("name", "Jane").put("age", 30).put("city", "Los Angeles"),
-            new Record().put("name", "Doe").put("age", 35).put("city", "San Francisco")
+                new Record().put("name", "John").put("age", 25).put("city", "New York"),
+                new Record().put("name", "Jane").put("age", 30).put("city", "Los Angeles"),
+                new Record().put("name", "Doe").put("age", 35).put("city", "San Francisco"),
+                new Record().put("name", "John Doe").put("age", 40).put("city", "Las Vegas"),
+                new Record().put("name", "Jane Doe").put("age", 45).put("city", "Miami"),
+                new Record().put("name", "John Smith").put("age", 50).put("city", "Chicago"),
+                new Record().put("name", "Jane Smith").put("age", 55).put("city", "Houston"),
+                new Record().put("name", "John Johnson").put("age", 60).put("city", "Philadelphia"),
+                new Record().put("name", "Jane Johnson").put("age", 65).put("city", "Phoenix"),
+                new Record().put("name", "John Williams").put("age", 70).put("city", "San Antonio")
         );
     }
 
@@ -26,37 +35,21 @@ public class Main {
         var records = generateRecords();
 
 
-
-        var filter = NotExpression
-                .builder()
-                        .expression(
-        AndExpressionNode
-                .builder()
-                .left(EqualsNode
-                        .builder()
-                        .left(ColumnNameExpression
-                                .builder()
-                                .columnName("name")
-                                .build())
-                        .right(StringExpression
-                                .builder()
-                                .value("John")
-                                .build())
-                        .build())
-                .right(EqualsNode
-                        .builder()
-                        .left(ColumnNameExpression
-                                .builder()
-                                .columnName("age")
-                                .build())
-                        .right(NumberExpression
-                                .builder()
-                                .value(25)
-                                .build())
-                        .build())
-                .build()
+        var filter = and(
+                not(
+                        like(
+                                column("name"),
+                                string("%John%")
                         )
-                .build();
+                ),
+                not(
+                        greaterThan(
+                                column("age"),
+                                number(100)
+                        )
+                )
+
+        );
 
 
         var filteredRecords = records
@@ -75,13 +68,6 @@ public class Main {
         var sqlGeneratorVisitor = new SqlGeneratorVisitor();
         var sql = "WHERE %s".formatted(filter.accept(sqlGeneratorVisitor, new Record()));
         System.out.println(sql);
-
-
-
-
-
-
-
 
 
     }
