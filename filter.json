@@ -1,0 +1,44 @@
+{
+  "expression": {
+    "left": {
+      "left": {
+        "expression": {
+          "left": {
+            "columnName": "name"
+          },
+          "right": {
+            "value": "%John%"
+          }
+        }
+      },
+      "right": {
+        "expression": {
+          "left": {
+            "columnName": "age"
+          },
+          "right": {
+            "value": 100
+          }
+        }
+      }
+    },
+    "right": {
+      "left": {
+        "left": {
+          "columnName": "city"
+        },
+        "right": {
+          "value": "New York"
+        }
+      },
+      "right": {
+        "left": {
+          "columnName": "city"
+        },
+        "right": {
+          "value": "Los Angeles"
+        }
+      }
+    }
+  }
+}
