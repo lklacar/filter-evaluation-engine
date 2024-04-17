@@ -30,8 +30,8 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
     }
 
     @Override
-    public String visit(NumberExpression numberExpression, Record tArg) {
-        var value = numberExpression.getValue();
+    public String visit(IntegerExpression integerExpression, Record tArg) {
+        var value = integerExpression.getValue();
         return Integer.toString(value);
     }
 

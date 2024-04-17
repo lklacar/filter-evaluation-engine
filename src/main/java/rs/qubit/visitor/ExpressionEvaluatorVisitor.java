@@ -1,12 +1,71 @@
 package rs.qubit.visitor;
 
+import org.apache.commons.lang3.tuple.Pair;
 import rs.qubit.Record;
 import rs.qubit.ast.*;
 import rs.qubit.value.*;
 
+import java.util.Date;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
 public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
+
+    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, BooleanValue>> EQUALS_OPERATIONS;
+    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, BooleanValue>> GREATER_THAN_OPERATIONS;
+
+    public ExpressionEvaluatorVisitor() {
+        EQUALS_OPERATIONS = Map.of(
+                Pair.of(BooleanValue.class, BooleanValue.class), this::booleanEquals,
+                Pair.of(IntegerValue.class, IntegerValue.class), this::integerEquals,
+                Pair.of(StringValue.class, StringValue.class), this::stringEquals,
+                Pair.of(DateValue.class, DateValue.class), this::dateEquals
+        );
+
+        GREATER_THAN_OPERATIONS = Map.of(
+                Pair.of(IntegerValue.class, IntegerValue.class), this::integerGreaterThan,
+                Pair.of(DateValue.class, DateValue.class), this::dateGreaterThan
+        );
+    }
+
+    private BooleanValue integerGreaterThan(Value left, Value right) {
+        assert left instanceof IntegerValue;
+        assert right instanceof IntegerValue;
+        return new BooleanValue(((IntegerValue) left).getValue() > ((IntegerValue) right).getValue());
+    }
+
+    private BooleanValue dateGreaterThan(Value left, Value right) {
+        assert left instanceof DateValue;
+        assert right instanceof DateValue;
+        return new BooleanValue(((DateValue) left).getValue().compareTo(((DateValue) right).getValue()) > 0);
+    }
+
+    private BooleanValue booleanEquals(Value left, Value right) {
+        assert left instanceof BooleanValue;
+        assert right instanceof BooleanValue;
+        return new BooleanValue(((BooleanValue) left).isValue() == ((BooleanValue) right).isValue());
+    }
+
+    private BooleanValue integerEquals(Value left, Value right) {
+        assert left instanceof IntegerValue;
+        assert right instanceof IntegerValue;
+        return new BooleanValue(((IntegerValue) left).getValue() == ((IntegerValue) right).getValue());
+    }
+
+    private BooleanValue stringEquals(Value left, Value right) {
+        assert left instanceof StringValue;
+        assert right instanceof StringValue;
+        return new BooleanValue(((StringValue) left).getValue().equals(((StringValue) right).getValue()));
+    }
+
+    private BooleanValue dateEquals(Value left, Value right) {
+        assert left instanceof DateValue;
+        assert right instanceof DateValue;
+        return new BooleanValue(((DateValue) left).getValue().equals(((DateValue) right).getValue()));
+    }
+
 
     @Override
     public Value visit(AndExpressionNode andExpressionNode, Record tArg) {
@@ -18,7 +77,17 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
     @Override
     public Value visit(ColumnNameExpression columnNameExpression, Record tArg) {
         var value = tArg.get(columnNameExpression.getColumnName());
-        return new StringValue(value.toString());
+        return parseValue(value);
+    }
+
+    private static Value parseValue(Object value) {
+        return switch (value) {
+            case String s -> new StringValue(s);
+            case Integer d -> new IntegerValue(d);
+            case Boolean b -> new BooleanValue(b);
+            case Date d -> new DateValue(d);
+            default -> throw new IllegalArgumentException("Unsupported type");
+        };
     }
 
     @Override
@@ -34,8 +103,8 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
     }
 
     @Override
-    public Value visit(NumberExpression numberExpression, Record tArg) {
-        return new NumberValue(numberExpression.getValue());
+    public Value visit(IntegerExpression integerExpression, Record tArg) {
+        return new IntegerValue(integerExpression.getValue());
     }
 
     @Override
@@ -51,28 +120,9 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         var left = equalsNode.getLeft().accept(this, tArg);
         var right = equalsNode.getRight().accept(this, tArg);
 
-        if(left instanceof BooleanValue leftValue && right instanceof BooleanValue rightValue) {
-            return new BooleanValue(leftValue.isValue() == rightValue.isValue());
-        }
-
-        if(left instanceof NumberValue leftValue && right instanceof NumberValue rightValue) {
-            return new BooleanValue(leftValue.getValue() == rightValue.getValue());
-        }
-
-        if(left instanceof StringValue leftValue && right instanceof StringValue rightValue) {
-            return new BooleanValue(leftValue.getValue().equals(rightValue.getValue()));
-        }
-
-        if(left instanceof DateValue leftValue && right instanceof DateValue rightValue) {
-            return new BooleanValue(leftValue.getValue().equals(rightValue.getValue()));
-        }
-
-        // try to cast both to string
-        return new BooleanValue(left.toString().equals(right.toString()));
-
-
-        //throw new IllegalArgumentException("Unsupported types for equals operation");
-
+        return Optional.ofNullable(EQUALS_OPERATIONS.get(Pair.of(left.getClass(), right.getClass())))
+                .map(operation -> operation.apply(left, right))
+                .orElseThrow(() -> new IllegalArgumentException("Unsupported types for equals operation"));
     }
 
     @Override
@@ -93,10 +143,9 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         var leftValue = left.getValue();
         var rightValue = right.getValue();
 
-
-        var like = rightValue.replace("%", ".*")
+        var like = rightValue
+                .replace("%", ".*")
                 .replace("_", ".");
-
 
         var pattern = Pattern.compile(like);
         var matcher = pattern.matcher(leftValue);
@@ -109,25 +158,8 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
         var left = greaterThanExpression.getLeft().accept(this, tArg);
         var right = greaterThanExpression.getRight().accept(this, tArg);
 
-        if(left instanceof NumberValue leftValue && right instanceof NumberValue rightValue) {
-            return new BooleanValue(leftValue.getValue() > rightValue.getValue());
-        }
-
-        if(left instanceof DateValue leftValue && right instanceof DateValue rightValue) {
-            return new BooleanValue(leftValue.getValue().compareTo(rightValue.getValue()) > 0);
-        }
-
-
-        // try to parse into numbers
-        try {
-            var leftValue = Double.parseDouble(left.toString());
-            var rightValue = Double.parseDouble(right.toString());
-            return new BooleanValue(leftValue > rightValue);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Unsupported types for greater than operation");
-        }
-
-
-        //throw new IllegalArgumentException("Unsupported types for greater than operation");
+        return Optional.ofNullable(GREATER_THAN_OPERATIONS.get(Pair.of(left.getClass(), right.getClass())))
+                .map(operation -> operation.apply(left, right))
+                .orElseThrow(() -> new IllegalArgumentException("Unsupported types for greater than operation"));
     }
 }

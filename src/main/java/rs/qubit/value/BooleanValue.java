@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class BooleanValue implements Value {
+public final class BooleanValue implements Value {
     private boolean value;
 
     @Override

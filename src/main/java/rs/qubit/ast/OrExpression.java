@@ -7,6 +7,7 @@ import rs.qubit.visitor.Visitor;
 @AllArgsConstructor
 @Builder
 @Data
+@NoArgsConstructor
 public class OrExpression implements ExpressionNode {
     private ExpressionNode left;
     private ExpressionNode right;

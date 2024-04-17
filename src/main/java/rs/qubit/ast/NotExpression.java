@@ -6,6 +6,7 @@ import rs.qubit.visitor.Visitor;
 @AllArgsConstructor
 @Builder
 @Data
+@NoArgsConstructor
 public class NotExpression implements ExpressionNode {
     private ExpressionNode expression;
 

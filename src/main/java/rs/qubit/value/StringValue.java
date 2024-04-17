@@ -6,7 +6,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class StringValue implements Value {
+public final class StringValue implements Value {
     private String value;
 
     @Override

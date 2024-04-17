@@ -31,8 +31,8 @@ public class Query {
         return new DateExpression(date);
     }
 
-    public static NumberExpression number(int value) {
-        return new NumberExpression(value);
+    public static IntegerExpression integer(int value) {
+        return new IntegerExpression(value);
     }
 
     public static StringExpression string(String value) {
