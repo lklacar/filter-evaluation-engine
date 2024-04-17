@@ -60,4 +60,19 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
     public String visit(BooleanExpression booleanExpression, Record tArg) {
         return Boolean.toString(booleanExpression.isValue());
     }
+
+    @Override
+    public String visit(LikeExpressionNode likeExpressionNode, Record tArg) {
+        var left = likeExpressionNode.getLeft().accept(this, tArg);
+        var right = likeExpressionNode.getRight().accept(this, tArg);
+        return "(" + left + " LIKE " + right + ")";
+    }
+
+    @Override
+    public String visit(GreaterThanExpression greaterThanExpression, Record tArg) {
+        var left = greaterThanExpression.getLeft().accept(this, tArg);
+        var right = greaterThanExpression.getRight().accept(this, tArg);
+
+        return "(" + left + " > " + right + ")";
+    }
 }

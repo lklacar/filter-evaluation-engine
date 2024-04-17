@@ -20,4 +20,8 @@ public interface Visitor<TRet, TEnv> {
     TRet visit(StringExpression stringExpression, TEnv tArg);
 
     TRet visit(BooleanExpression booleanExpression, TEnv tArg);
+
+    TRet visit(LikeExpressionNode likeExpressionNode, TEnv tArg);
+
+    TRet visit(GreaterThanExpression greaterThanExpression, TEnv tArg);
 }
