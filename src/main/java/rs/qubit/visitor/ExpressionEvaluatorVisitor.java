@@ -11,76 +11,22 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
-public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
-
-    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, Boolean>> EQUALS_OPERATIONS;
-    private final Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, Boolean>> GREATER_THAN_OPERATIONS;
-
-    public ExpressionEvaluatorVisitor() {
-        EQUALS_OPERATIONS = Map.of(
-                Pair.of(BooleanValue.class, BooleanValue.class), this::booleanEquals,
-                Pair.of(IntegerValue.class, IntegerValue.class), this::integerEquals,
-                Pair.of(StringValue.class, StringValue.class), this::stringEquals,
-                Pair.of(DateValue.class, DateValue.class), this::dateEquals
-        );
-
-        GREATER_THAN_OPERATIONS = Map.of(
-                Pair.of(IntegerValue.class, IntegerValue.class), this::integerGreaterThan,
-                Pair.of(DateValue.class, DateValue.class), this::dateGreaterThan
-        );
-    }
-
-    private Boolean integerGreaterThan(Value left, Value right) {
-        assert left instanceof IntegerValue;
-        assert right instanceof IntegerValue;
-        return ((IntegerValue) left).getValue() > ((IntegerValue) right).getValue();
-    }
-
-    private Boolean dateGreaterThan(Value left, Value right) {
-        assert left instanceof DateValue;
-        assert right instanceof DateValue;
-        return ((DateValue) left).getValue().compareTo(((DateValue) right).getValue()) > 0;
-    }
-
-    private Boolean booleanEquals(Value left, Value right) {
-        assert left instanceof BooleanValue;
-        assert right instanceof BooleanValue;
-        return ((BooleanValue) left).isValue() == ((BooleanValue) right).isValue();
-    }
-
-    private Boolean integerEquals(Value left, Value right) {
-        assert left instanceof IntegerValue;
-        assert right instanceof IntegerValue;
-        return ((IntegerValue) left).getValue() == ((IntegerValue) right).getValue();
-    }
-
-    private Boolean stringEquals(Value left, Value right) {
-        assert left instanceof StringValue;
-        assert right instanceof StringValue;
-        return ((StringValue) left).getValue().equals(((StringValue) right).getValue());
-    }
-
-    private Boolean dateEquals(Value left, Value right) {
-        assert left instanceof DateValue;
-        assert right instanceof DateValue;
-        return ((DateValue) left).getValue().equals(((DateValue) right).getValue());
-    }
-
+public class ExpressionEvaluatorVisitor implements Visitor<ComparableValue, Record> {
 
     @Override
-    public Value visit(AndExpressionNode andExpressionNode, Record tArg) {
+    public ComparableValue visit(AndExpressionNode andExpressionNode, Record tArg) {
         var left = ((BooleanValue) andExpressionNode.getLeft().accept(this, tArg));
         var right = ((BooleanValue) andExpressionNode.getRight().accept(this, tArg));
         return new BooleanValue(left.isValue() && right.isValue());
     }
 
     @Override
-    public Value visit(ColumnNameExpression columnNameExpression, Record tArg) {
+    public ComparableValue visit(ColumnNameExpression columnNameExpression, Record tArg) {
         var value = tArg.get(columnNameExpression.getColumnName());
         return parseValue(value);
     }
 
-    private static Value parseValue(Object value) {
+    private static ComparableValue parseValue(Object value) {
         return switch (value) {
             case String s -> new StringValue(s);
             case Integer d -> new IntegerValue(d);
@@ -91,24 +37,24 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
     }
 
     @Override
-    public Value visit(DateExpression dateExpression, Record tArg) {
+    public ComparableValue visit(DateExpression dateExpression, Record tArg) {
         return new DateValue(dateExpression.getDate());
     }
 
     @Override
-    public Value visit(NotExpression notExpression, Record tArg) {
+    public ComparableValue visit(NotExpression notExpression, Record tArg) {
         var expression = ((BooleanValue) notExpression.getExpression().accept(this, tArg));
 
         return new BooleanValue(!expression.isValue());
     }
 
     @Override
-    public Value visit(IntegerExpression integerExpression, Record tArg) {
+    public ComparableValue visit(IntegerExpression integerExpression, Record tArg) {
         return new IntegerValue(integerExpression.getValue());
     }
 
     @Override
-    public Value visit(OrExpression orExpression, Record tArg) {
+    public ComparableValue visit(OrExpression orExpression, Record tArg) {
         var left = ((BooleanValue) orExpression.getLeft().accept(this, tArg));
         var right = ((BooleanValue) orExpression.getRight().accept(this, tArg));
 
@@ -116,25 +62,27 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
     }
 
     @Override
-    public Value visit(EqualsNode equalsNode, Record tArg) {
+    public ComparableValue visit(EqualsNode equalsNode, Record tArg) {
         var left = equalsNode.getLeft().accept(this, tArg);
         var right = equalsNode.getRight().accept(this, tArg);
 
-        return executeBinaryOperation(EQUALS_OPERATIONS, left, right);
+        var result = left.equals(right);
+
+        return new BooleanValue(result);
     }
 
     @Override
-    public Value visit(StringExpression stringExpression, Record tArg) {
+    public ComparableValue visit(StringExpression stringExpression, Record tArg) {
         return new StringValue(stringExpression.getValue());
     }
 
     @Override
-    public Value visit(BooleanExpression booleanExpression, Record tArg) {
+    public ComparableValue visit(BooleanExpression booleanExpression, Record tArg) {
         return new BooleanValue(booleanExpression.isValue());
     }
 
     @Override
-    public Value visit(LikeExpressionNode likeExpressionNode, Record tArg) {
+    public ComparableValue visit(LikeExpressionNode likeExpressionNode, Record tArg) {
         var left = ((StringValue) likeExpressionNode.getLeft().accept(this, tArg));
         var right = ((StringValue) likeExpressionNode.getRight().accept(this, tArg));
 
@@ -152,16 +100,12 @@ public class ExpressionEvaluatorVisitor implements Visitor<Value, Record> {
     }
 
     @Override
-    public Value visit(GreaterThanExpression greaterThanExpression, Record tArg) {
+    public ComparableValue visit(GreaterThanExpression greaterThanExpression, Record tArg) {
         var left = greaterThanExpression.getLeft().accept(this, tArg);
         var right = greaterThanExpression.getRight().accept(this, tArg);
 
-        return executeBinaryOperation(GREATER_THAN_OPERATIONS, left, right);
-    }
+        var result = left.greaterThan(right);
 
-    private BooleanValue executeBinaryOperation(Map<Pair<Class<?>, Class<?>>, BiFunction<Value, Value, Boolean>> operations, Value left, Value right) {
-        return Optional.ofNullable(operations.get(Pair.of(left.getClass(), right.getClass())))
-                .map(operation -> new BooleanValue(operation.apply(left, right)))
-                .orElseThrow(() -> new IllegalArgumentException("Unsupported types for greater than operation"));
+        return new BooleanValue(result);
     }
 }
