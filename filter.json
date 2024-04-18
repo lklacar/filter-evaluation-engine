@@ -1,63 +1,38 @@
 {
-  "type": "NOT",
-  "expression": {
-    "type": "COMPOSITE_AND",
-    "expressions": [
-      {
-        "type": "NOT",
-        "expression": {
-          "type": "LIKE",
-          "left": {
-            "type": "COLUMN",
-            "columnName": "name"
-          },
-          "right": {
-            "type": "STRING",
-            "value": "%John%"
-          }
-        }
+  "type": "COMPOSITE_AND",
+  "expressions": [
+    {
+      "type": "EQUALS",
+      "left": {
+        "type": "COLUMN",
+        "columnName": "name"
       },
-      {
-        "type": "NOT",
-        "expression": {
-          "type": "GREATER_THAN",
-          "left": {
-            "type": "COLUMN",
-            "columnName": "age"
-          },
-          "right": {
-            "type": "INTEGER",
-            "value": 100
-          }
-        }
-      },
-      {
-        "type": "COMPOSITE_OR",
-        "expressions": [
-          {
-            "type": "EQUALS",
-            "left": {
-              "type": "COLUMN",
-              "columnName": "city"
-            },
-            "right": {
-              "type": "STRING",
-              "value": "New York"
-            }
-          },
-          {
-            "type": "EQUALS",
-            "left": {
-              "type": "COLUMN",
-              "columnName": "city"
-            },
-            "right": {
-              "type": "STRING",
-              "value": "Los Angeles"
-            }
-          }
-        ]
+      "right": {
+        "type": "STRING",
+        "value": "John"
       }
-    ]
-  }
+    },
+    {
+      "type": "EQUALS",
+      "left": {
+        "type": "COLUMN",
+        "columnName": "age"
+      },
+      "right": {
+        "type": "INTEGER",
+        "value": 25
+      }
+    },
+    {
+      "type": "EQUALS",
+      "left": {
+        "type": "COLUMN",
+        "columnName": "city"
+      },
+      "right": {
+        "type": "STRING",
+        "value": "New York"
+      }
+    }
+  ]
 }

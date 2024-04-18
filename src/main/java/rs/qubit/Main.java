@@ -38,31 +38,46 @@ public class Main {
         var records = generateRecords();
 
 
-        var filter = not(
-                and(
-                        not(
-                                like(
-                                        column("name"),
-                                        string("%John%")
-                                )
-                        ),
-                        not(
-                                greaterThan(
-                                        column("age"),
-                                        integer(100)
-                                )
-                        ),
-                        or(
-                                equal(
-                                        column("city"),
-                                        string("New York")
-                                ),
-                                equal(
-                                        column("city"),
-                                        string("Los Angeles")
-                                )
-                        )
-                ));
+//        var filter = not(
+//                and(
+//                        not(
+//                                like(
+//                                        column("name"),
+//                                        string("%John%")
+//                                )
+//                        ),
+//                        not(
+//                                greaterThan(
+//                                        column("age"),
+//                                        integer(100)
+//                                )
+//                        ),
+//                        or(
+//                                equal(
+//                                        column("city"),
+//                                        string("New York")
+//                                ),
+//                                equal(
+//                                        column("city"),
+//                                        string("Los Angeles")
+//                                )
+//                        )
+//                ));
+
+        var filter = and(
+                equal(
+                        column("name"),
+                        string("John")
+                ),
+                equal(
+                        column("age"),
+                        integer(25)
+                ),
+                equal(
+                        column("city"),
+                        string("New York")
+                )
+        );
 
 
         var serializedFilter = new ObjectMapper().writeValueAsString(filter);
