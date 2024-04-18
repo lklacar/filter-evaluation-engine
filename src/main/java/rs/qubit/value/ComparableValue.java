@@ -4,4 +4,6 @@ public sealed interface ComparableValue extends Value permits BooleanValue, Date
     boolean equals(ComparableValue other);
 
     boolean greaterThan(ComparableValue other);
+
+    boolean lessThan(ComparableValue other);
 }

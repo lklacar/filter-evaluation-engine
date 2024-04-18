@@ -28,4 +28,9 @@ public final class StringValue implements ComparableValue {
             default -> throw new IllegalArgumentException("Cannot compare StringValue with " + other.getClass());
         };
     }
+
+    @Override
+    public boolean lessThan(ComparableValue other) {
+        throw new UnsupportedOperationException("Cannot compare StringValue with " + other.getClass());
+    }
 }

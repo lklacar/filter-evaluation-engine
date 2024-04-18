@@ -32,4 +32,12 @@ public final class DateValue implements ComparableValue {
             default -> throw new IllegalArgumentException("Cannot compare DateValue with " + other.getClass());
         };
     }
+
+    @Override
+    public boolean lessThan(ComparableValue other) {
+        return switch (other) {
+            case DateValue dateValue -> value.compareTo(dateValue.value) < 0;
+            default -> throw new IllegalArgumentException("Cannot compare DateValue with " + other.getClass());
+        };
+    }
 }

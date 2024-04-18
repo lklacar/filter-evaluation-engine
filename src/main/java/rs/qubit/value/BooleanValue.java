@@ -25,4 +25,9 @@ public final class BooleanValue implements ComparableValue {
     public boolean greaterThan(ComparableValue other) {
         throw new UnsupportedOperationException("Cannot compare BooleanValue with " + other.getClass());
     }
+
+    @Override
+    public boolean lessThan(ComparableValue other) {
+        throw new UnsupportedOperationException("Cannot compare BooleanValue with " + other.getClass());
+    }
 }

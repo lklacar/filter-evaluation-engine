@@ -30,4 +30,12 @@ public final class IntegerValue implements ComparableValue {
             default -> throw new IllegalArgumentException("Cannot compare IntegerValue with " + other.getClass());
         };
     }
+
+    @Override
+    public boolean lessThan(ComparableValue other) {
+        return switch (other) {
+            case IntegerValue integerValue -> value < integerValue.value;
+            default -> throw new IllegalArgumentException("Cannot compare IntegerValue with " + other.getClass());
+        };
+    }
 }

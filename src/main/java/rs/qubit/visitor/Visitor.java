@@ -24,4 +24,6 @@ public interface Visitor<TRet, TEnv> {
     TRet visit(LikeExpressionNode likeExpressionNode, TEnv tArg);
 
     TRet visit(GreaterThanExpression greaterThanExpression, TEnv tArg);
+
+    TRet visit(LessThanExpression lessThanExpression, TEnv tArg);
 }

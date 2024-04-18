@@ -38,30 +38,31 @@ public class Main {
         var records = generateRecords();
 
 
-        var filter = not(and(
-                not(
-                        like(
-                                column("name"),
-                                string("%John%")
-                        )
-                ),
-                not(
-                        greaterThan(
-                                column("age"),
-                                integer(100)
-                        )
-                ),
-                or(
-                        equal(
-                                column("city"),
-                                string("New York")
+        var filter = not(
+                and(
+                        not(
+                                like(
+                                        column("name"),
+                                        string("%John%")
+                                )
                         ),
-                        equal(
-                                column("city"),
-                                string("Los Angeles")
+                        not(
+                                greaterThan(
+                                        column("age"),
+                                        integer(100)
+                                )
+                        ),
+                        or(
+                                equal(
+                                        column("city"),
+                                        string("New York")
+                                ),
+                                equal(
+                                        column("city"),
+                                        string("Los Angeles")
+                                )
                         )
-                )
-        ));
+                ));
 
 
         var serializedFilter = new ObjectMapper().writeValueAsString(filter);

@@ -108,4 +108,14 @@ public class ExpressionEvaluatorVisitor implements Visitor<ComparableValue, Reco
 
         return new BooleanValue(result);
     }
+
+    @Override
+    public ComparableValue visit(LessThanExpression lessThanExpression, Record tArg) {
+        var left = lessThanExpression.getLeft().accept(this, tArg);
+        var right = lessThanExpression.getRight().accept(this, tArg);
+
+        var result = left.lessThan(right);
+
+        return new BooleanValue(result);
+    }
 }

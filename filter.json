@@ -1,59 +1,59 @@
 {
-  "type": "not",
+  "type": "NOT",
   "expression": {
-    "type": "and",
+    "type": "AND",
     "left": {
-      "type": "and",
+      "type": "AND",
       "left": {
-        "type": "not",
+        "type": "NOT",
         "expression": {
-          "type": "like",
+          "type": "LIKE",
           "left": {
-            "type": "column",
+            "type": "COLUMN",
             "columnName": "name"
           },
           "right": {
-            "type": "string",
+            "type": "STRING",
             "value": "%John%"
           }
         }
       },
       "right": {
-        "type": "not",
+        "type": "NOT",
         "expression": {
-          "type": "greaterThan",
+          "type": "GREATER_THAN",
           "left": {
-            "type": "column",
+            "type": "COLUMN",
             "columnName": "age"
           },
           "right": {
-            "type": "number",
+            "type": "INTEGER",
             "value": 100
           }
         }
       }
     },
     "right": {
-      "type": "or",
+      "type": "OR",
       "left": {
-        "type": "equal",
+        "type": "EQUALS",
         "left": {
-          "type": "column",
+          "type": "COLUMN",
           "columnName": "city"
         },
         "right": {
-          "type": "string",
+          "type": "STRING",
           "value": "New York"
         }
       },
       "right": {
-        "type": "equal",
+        "type": "EQUALS",
         "left": {
-          "type": "column",
+          "type": "COLUMN",
           "columnName": "city"
         },
         "right": {
-          "type": "string",
+          "type": "STRING",
           "value": "Los Angeles"
         }
       }

@@ -75,4 +75,12 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
 
         return "(%s > %s)".formatted(left, right);
     }
+
+    @Override
+    public String visit(LessThanExpression lessThanExpression, Record tArg) {
+        var left = lessThanExpression.getLeft().accept(this, tArg);
+        var right = lessThanExpression.getRight().accept(this, tArg);
+
+        return "(%s < %s)".formatted(left, right);
+    }
 }
