@@ -83,4 +83,16 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
 
         return "(%s < %s)".formatted(left, right);
     }
+
+    @Override
+    public String visit(CompositeAnd compositeAnd, Record tArg) {
+        var binaryAnd = compositeAnd.toBinaryExpression();
+        return binaryAnd.accept(this, tArg);
+    }
+
+    @Override
+    public String visit(CompositeOr compositeOr, Record tArg) {
+        var binaryOr = compositeOr.toBinaryExpression();
+        return binaryOr.accept(this, tArg);
+    }
 }

@@ -118,4 +118,16 @@ public class ExpressionEvaluatorVisitor implements Visitor<ComparableValue, Reco
 
         return new BooleanValue(result);
     }
+
+    @Override
+    public ComparableValue visit(CompositeAnd compositeAnd, Record tArg) {
+        var binaryAnd = compositeAnd.toBinaryExpression();
+        return binaryAnd.accept(this, tArg);
+    }
+
+    @Override
+    public ComparableValue visit(CompositeOr compositeOr, Record tArg) {
+        var binaryOr = compositeOr.toBinaryExpression();
+        return binaryOr.accept(this, tArg);
+    }
 }

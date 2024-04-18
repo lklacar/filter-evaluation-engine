@@ -26,4 +26,8 @@ public interface Visitor<TRet, TEnv> {
     TRet visit(GreaterThanExpression greaterThanExpression, TEnv tArg);
 
     TRet visit(LessThanExpression lessThanExpression, TEnv tArg);
+
+    TRet visit(CompositeAnd compositeAnd, TEnv tArg);
+
+    TRet visit(CompositeOr compositeOr, TEnv tArg);
 }

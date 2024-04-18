@@ -7,16 +7,14 @@ import java.util.Date;
 
 public class Query {
 
-    public static OrExpression or(ExpressionNode... expressions) {
-        return ((OrExpression) Arrays.stream(expressions)
-                .reduce(OrExpression::new)
-                .orElseThrow());
+    public static CompositeOr or(ExpressionNode... expressions) {
+        return new CompositeOr(Arrays.asList(expressions));
     }
 
-    public static AndExpressionNode and(ExpressionNode... expressions) {
-        return ((AndExpressionNode) Arrays.stream(expressions)
-                .reduce(AndExpressionNode::new)
-                .orElseThrow());
+    public static CompositeAnd and(ExpressionNode... expressions) {
+        return CompositeAnd.builder()
+                .expressions(Arrays.asList(expressions))
+                .build();
     }
 
     public static NotExpression not(ExpressionNode expression) {

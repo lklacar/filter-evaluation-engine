@@ -18,6 +18,9 @@ import rs.qubit.visitor.Visitor;
         @JsonSubTypes.Type(value = GreaterThanExpression.class, name = "GREATER_THAN"),
         @JsonSubTypes.Type(value = AndExpressionNode.class, name = "AND"),
         @JsonSubTypes.Type(value = LikeExpressionNode.class, name = "LIKE"),
+        @JsonSubTypes.Type(value = LessThanExpression.class, name = "LESS_THAN"),
+        @JsonSubTypes.Type(value = CompositeAnd.class, name = "COMPOSITE_AND"),
+        @JsonSubTypes.Type(value = CompositeOr.class, name = "COMPOSITE_OR")
 })
 public interface ExpressionNode {
     <TRet, TArg> TRet accept(Visitor<TRet, TArg> visitor, TArg arg);
