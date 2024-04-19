@@ -7,7 +7,9 @@ import rs.qubit.value.BooleanValue;
 import rs.qubit.visitor.ExpressionEvaluatorVisitor;
 import rs.qubit.visitor.SqlGeneratorVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static rs.qubit.Query.*;
 
@@ -15,18 +17,17 @@ public class Main {
 
     @SuppressWarnings("DataFlowIssue")
     public static List<Record> generateRecords() {
-        return List.of(
-                new Record().put("name", "John").put("age", 25).put("city", "New York"),
-                new Record().put("name", "Jane").put("age", 30).put("city", "Los Angeles"),
-                new Record().put("name", "Doe").put("age", 35).put("city", "San Francisco"),
-                new Record().put("name", "John Doe").put("age", 40).put("city", "Las Vegas"),
-                new Record().put("name", "Jane Doe").put("age", 45).put("city", "Miami"),
-                new Record().put("name", "John Smith").put("age", 50).put("city", "Chicago"),
-                new Record().put("name", "Jane Smith").put("age", 55).put("city", "Houston"),
-                new Record().put("name", "John Johnson").put("age", 60).put("city", "Philadelphia"),
-                new Record().put("name", "Jane Johnson").put("age", 65).put("city", "Phoenix"),
-                new Record().put("name", "John Williams").put("age", 70).put("city", "San Antonio")
-        );
+
+        var result = new ArrayList<Record>(10000000);
+        for (int i = 0; i < 10000000; i++) {
+            var record = new Record();
+            record.put("name", "John %d".formatted(i));
+            record.put("age", i);
+            record.put("city", "City %d".formatted(i));
+            result.add(record);
+        }
+
+        return result;
     }
 
 
@@ -35,39 +36,18 @@ public class Main {
 
         var expressionEvaluatorVisitor = new ExpressionEvaluatorVisitor();
 
+        System.out.println("Generating data...");
+
+        var generatingStart = System.currentTimeMillis();
         var records = generateRecords();
+        var generatingEnd = System.currentTimeMillis();
+        System.out.println("Data generated in %d ms".formatted(generatingEnd - generatingStart));
 
 
-//        var filter = not(
-//                and(
-//                        not(
-//                                like(
-//                                        column("name"),
-//                                        string("%John%")
-//                                )
-//                        ),
-//                        not(
-//                                greaterThan(
-//                                        column("age"),
-//                                        integer(100)
-//                                )
-//                        ),
-//                        or(
-//                                equal(
-//                                        column("city"),
-//                                        string("New York")
-//                                ),
-//                                equal(
-//                                        column("city"),
-//                                        string("Los Angeles")
-//                                )
-//                        )
-//                ));
-
-        var filter = and(
+        var filter = or(
                 equal(
                         column("name"),
-                        string("John")
+                        string("John 7")
                 ),
                 equal(
                         column("age"),
@@ -75,29 +55,48 @@ public class Main {
                 ),
                 equal(
                         column("city"),
-                        string("New York")
+                        string("City 65")
                 )
         );
 
-
         var serializedFilter = new ObjectMapper().writeValueAsString(filter);
-        System.out.println(serializedFilter);
-
         var deserializedFilter = new ObjectMapper().readValue(serializedFilter, ExpressionNode.class);
+
+        var start = System.currentTimeMillis();
+        System.out.println("Starting benchmark");
 
 
         var filteredRecords = records
                 .stream()
+                .parallel()
                 .filter(record -> {
                     var shouldExist = expressionEvaluatorVisitor.visit(filter, record);
                     return shouldExist instanceof BooleanValue && ((BooleanValue) shouldExist).isValue();
                 })
                 .toList();
 
-        System.out.println(filter);
-
+        var end = System.currentTimeMillis();
+        System.out.printf("Filtering took: %d ms\n", end - start);
         System.out.printf("Original records: %d\n", records.size());
         System.out.printf("Filtered records: %d\n", filteredRecords.size());
+
+        System.out.println("Filtering using Java streams");
+        var start2 = System.currentTimeMillis();
+        var filteredRecords2 = records
+                .stream()
+                .filter(record -> {
+                    var name = record.get("name");
+                    var age = record.get("age");
+                    var city = record.get("city");
+
+                    return name.equals("John 7") || age.equals(25) || city.equals("City 65");
+                })
+                .toList();
+        var end2 = System.currentTimeMillis();
+        System.out.printf("Filtering took: %d ms\n", end2 - start2);
+        System.out.printf("Original records: %d\n", records.size());
+        System.out.printf("Filtered records: %d\n", filteredRecords2.size());
+
 
 
         var sqlGeneratorVisitor = new SqlGeneratorVisitor();
