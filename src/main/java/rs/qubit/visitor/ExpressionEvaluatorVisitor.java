@@ -1,14 +1,10 @@
 package rs.qubit.visitor;
 
-import org.apache.commons.lang3.tuple.Pair;
 import rs.qubit.Record;
 import rs.qubit.ast.*;
 import rs.qubit.value.*;
 
 import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
 public class ExpressionEvaluatorVisitor implements Visitor<ComparableValue, Record> {
@@ -21,8 +17,8 @@ public class ExpressionEvaluatorVisitor implements Visitor<ComparableValue, Reco
     }
 
     @Override
-    public ComparableValue visit(ColumnNameExpression columnNameExpression, Record tArg) {
-        var value = tArg.get(columnNameExpression.getColumnName());
+    public ComparableValue visit(IdentifierExpression identifierExpression, Record tArg) {
+        var value = tArg.get(identifierExpression.getColumnName());
         return parseValue(value);
     }
 

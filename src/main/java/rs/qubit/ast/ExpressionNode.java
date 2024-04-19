@@ -11,7 +11,7 @@ import rs.qubit.visitor.Visitor;
         @JsonSubTypes.Type(value = IntegerExpression.class, name = "INTEGER"),
         @JsonSubTypes.Type(value = EqualsNode.class, name = "EQUALS"),
         @JsonSubTypes.Type(value = OrExpression.class, name = "OR"),
-        @JsonSubTypes.Type(value = ColumnNameExpression.class, name = "COLUMN"),
+        @JsonSubTypes.Type(value = IdentifierExpression.class, name = "COLUMN"),
         @JsonSubTypes.Type(value = NotExpression.class, name = "NOT"),
         @JsonSubTypes.Type(value = DateExpression.class, name = "DATE"),
         @JsonSubTypes.Type(value = BooleanExpression.class, name = "BOOLEAN"),

@@ -7,7 +7,7 @@ import rs.qubit.visitor.Visitor;
 @Builder
 @Data
 @NoArgsConstructor
-public class ColumnNameExpression implements ExpressionNode {
+public class IdentifierExpression implements ExpressionNode {
     private String columnName;
 
 

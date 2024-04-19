@@ -5,7 +5,7 @@ import rs.qubit.ast.*;
 public interface Visitor<TRet, TEnv> {
     TRet visit(AndExpressionNode andExpressionNode, TEnv tArg);
 
-    TRet visit(ColumnNameExpression columnNameExpression, TEnv tArg);
+    TRet visit(IdentifierExpression identifierExpression, TEnv tArg);
 
     TRet visit(DateExpression dateExpression, TEnv tArg);
 

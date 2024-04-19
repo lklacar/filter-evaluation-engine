@@ -21,8 +21,8 @@ public class Query {
         return new NotExpression(expression);
     }
 
-    public static ColumnNameExpression column(String columnName) {
-        return new ColumnNameExpression(columnName);
+    public static IdentifierExpression column(String columnName) {
+        return new IdentifierExpression(columnName);
     }
 
     public static DateExpression date(Date date) {

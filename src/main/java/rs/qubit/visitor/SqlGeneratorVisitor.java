@@ -13,8 +13,8 @@ public class SqlGeneratorVisitor implements Visitor<String, Record> {
     }
 
     @Override
-    public String visit(ColumnNameExpression columnNameExpression, Record tArg) {
-        return columnNameExpression.getColumnName();
+    public String visit(IdentifierExpression identifierExpression, Record tArg) {
+        return identifierExpression.getColumnName();
     }
 
     @Override
