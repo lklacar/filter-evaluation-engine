@@ -17,8 +17,7 @@ expression
     | DOUBLE                                                                                      # doubleExpression
     | BOOLEAN                                                                                     # booleanExpression
     | NULL                                                                                        # nullExpression
-    | year=LONG '-' month=LONG '-' day=LONG                                                       # dateExpression
-    | year=LONG '-' month=LONG '-' day=LONG 'T' hour=LONG ':' minute=LONG ':' second=LONG         # dateTimeExpression
+    | year=LONG '-' month=LONG '-' day=LONG ('T' hour=LONG ':' minute=LONG ':' second=LONG)?      # dateTimeExpression
     ;
 
 

@@ -29,7 +29,8 @@ public class ReflectionUtil {
                 var isMap = Map.class.isAssignableFrom(field.getPropertyType());
                 var isEnum = field.getPropertyType().isEnum();
                 var isString = field.getPropertyType().equals(String.class);
-                var isObject = !isPrimitive && !isIterable && !isArray && !isMap && !isEnum && !isString;
+                var isDateTime = field.getPropertyType().equals(java.time.LocalDate.class) || field.getPropertyType().equals(java.time.LocalDateTime.class);
+                var isObject = !isPrimitive && !isIterable && !isArray && !isMap && !isEnum && !isString && !isDateTime;
                 var isNull = value == null;
 
                 if (isNull) {
@@ -58,6 +59,8 @@ public class ReflectionUtil {
                         mapMap.put(entry.getKey(), entry.getValue());
                     }
                     map.put(field.getName(), mapMap);
+                } else if (isDateTime) {
+                    map.put(field.getName(), value);
                 } else if (isObject) {
                     map.put(field.getName(), getFields(value));
                 } else {

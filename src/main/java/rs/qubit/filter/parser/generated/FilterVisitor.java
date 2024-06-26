@@ -25,13 +25,6 @@ public interface FilterVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIdentifierExpression(FilterParser.IdentifierExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code dateExpression}
-	 * labeled alternative in {@link FilterParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDateExpression(FilterParser.DateExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link FilterParser#expression}.
 	 * @param ctx the parse tree

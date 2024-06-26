@@ -6,6 +6,7 @@ import rs.qubit.filter.parser.generated.FilterParser;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Optional;
 
 public class ExpressionParserVisitor extends FilterBaseVisitor<ExpressionNode> {
 
@@ -88,22 +89,14 @@ public class ExpressionParserVisitor extends FilterBaseVisitor<ExpressionNode> {
         var year = Integer.parseInt(ctx.year.getText());
         var month = Integer.parseInt(ctx.month.getText());
         var day = Integer.parseInt(ctx.day.getText());
-        var hour = Integer.parseInt(ctx.hour.getText());
-        var minute = Integer.parseInt(ctx.minute.getText());
-        var second = Integer.parseInt(ctx.second.getText());
+        var hour = Optional.ofNullable(ctx.hour).map(h -> Integer.parseInt(h.getText())).orElse(0);
+        var minute = Optional.ofNullable(ctx.minute).map(m -> Integer.parseInt(m.getText())).orElse(0);
+        var second = Optional.ofNullable(ctx.second).map(s -> Integer.parseInt(s.getText())).orElse(0);
 
         var date = LocalDateTime.of(year, month, day, hour, minute, second);
         return new DateTimeExpressionNode(date);
     }
 
-    @Override
-    public ExpressionNode visitDateExpression(FilterParser.DateExpressionContext ctx) {
-        var year = Integer.parseInt(ctx.year.getText());
-        var month = Integer.parseInt(ctx.month.getText());
-        var day = Integer.parseInt(ctx.day.getText());
-        var date = LocalDateTime.of(year, month, day, 0, 0, 0);
-        return new DateTimeExpressionNode(date);
-    }
 
     @Override
     public ExpressionNode visitGreaterThanExpression(FilterParser.GreaterThanExpressionContext ctx) {

@@ -6,6 +6,9 @@ import rs.qubit.filter.parser.ast.*;
 import rs.qubit.filter.visitor.ExpressionVisitor;
 import rs.qubit.filter.visitor.Record;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationContext, Record> {
 
     public boolean evaluate(ExpressionNode filter, EvaluationContext env, Record record) {
@@ -72,6 +75,10 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
             case String s -> new StringValue(s);
             case Integer d -> new LongValue(Long.valueOf(d));
             case Boolean b -> new BooleanValue(b);
+            case Double d -> new DoubleValue(d);
+            case LocalDateTime d -> new DateTimeValue(d);
+            case LocalDate d -> new DateTimeValue(d.atStartOfDay());
+            case null -> new NullValue();
             default -> throw new FilterException("Unsupported value type: " + value.getClass());
         };
     }

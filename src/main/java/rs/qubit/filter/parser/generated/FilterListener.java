@@ -32,18 +32,6 @@ public interface FilterListener extends ParseTreeListener {
 	 */
 	void exitIdentifierExpression(FilterParser.IdentifierExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code dateExpression}
-	 * labeled alternative in {@link FilterParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterDateExpression(FilterParser.DateExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code dateExpression}
-	 * labeled alternative in {@link FilterParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitDateExpression(FilterParser.DateExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link FilterParser#expression}.
 	 * @param ctx the parse tree
