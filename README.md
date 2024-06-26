@@ -72,7 +72,7 @@ public class Main {
 
         var filteredUsers = users
                 .stream()
-                .filter(fel("address.street = 'Main Street'"))
+                .filter(Fel.filter("address.street = 'Main Street'"))
                 .toList();
 
         System.out.println(filteredUsers);
