@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import rs.qubit.fel.evaluator.DefaultEvaluationContext;
-import rs.qubit.fel.evaluator.FelFunction;
 import rs.qubit.fel.evaluator.value.NullValue;
 import rs.qubit.fel.evaluator.value.StringValue;
 
@@ -14,16 +13,6 @@ import java.util.List;
 
 
 public class Main {
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    static class User {
-        private String firstName;
-        private String lastName;
-        private Instant dateOfBirth;
-    }
 
     public static void main(String[] args) {
 
@@ -54,5 +43,15 @@ public class Main {
         System.out.println(filteredUsers);
 
 
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    static class User {
+        private String firstName;
+        private String lastName;
+        private Instant dateOfBirth;
     }
 }

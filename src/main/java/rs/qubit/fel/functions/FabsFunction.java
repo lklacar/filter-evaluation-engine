@@ -2,7 +2,6 @@ package rs.qubit.fel.functions;
 
 import rs.qubit.fel.evaluator.FelFunction;
 import rs.qubit.fel.evaluator.value.DoubleValue;
-import rs.qubit.fel.evaluator.value.LongValue;
 import rs.qubit.fel.evaluator.value.Value;
 import rs.qubit.fel.exception.FilterException;
 
