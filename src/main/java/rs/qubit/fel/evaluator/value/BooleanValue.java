@@ -40,4 +40,9 @@ public record BooleanValue(boolean value) implements Value {
     public Object asObject() {
         throw new FilterException("Cannot convert boolean to object");
     }
+
+    @Override
+    public String asString() {
+        return String.valueOf(value);
+    }
 }

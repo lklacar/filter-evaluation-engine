@@ -36,4 +36,6 @@ public interface ExpressionVisitor<T, E, R> {
     T visit(LessThanExpressionNode lessThanExpressionNode, E env, R record);
 
     T visit(DotExpressionNode dotExpressionNode, E env, R record);
+
+    T visit(FunctionCallExpressionNode functionCallExpressionNode, E env, R record);
 }

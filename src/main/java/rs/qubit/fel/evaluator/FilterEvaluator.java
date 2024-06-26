@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -21,11 +22,6 @@ import java.util.function.Function;
 @Getter
 public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationContext, Object> {
 
-    public Map<Class<?>, Function<Object, Value>> additionalMappers;
-
-    public FilterEvaluator() {
-        this.additionalMappers = new HashMap<>();
-    }
 
     @Override
     public Value visit(OrExpressionNode orExpressionNode, EvaluationContext env, Object record) {
@@ -80,10 +76,11 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
 
         var value = ReflectionUtil.accessField(record, identifier);
 
-        return parseValue(value);
+        return parseValue(value, env);
     }
 
-    private Value parseValue(Object value) {
+    private Value parseValue(Object value, EvaluationContext evaluationContext) {
+
         return switch (value) {
             case Byte b -> new LongValue(Long.valueOf(b));
             case Short s -> new LongValue(Long.valueOf(s));
@@ -100,7 +97,7 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
             case Instant i -> new DateTimeValue(i.atZone(ZoneId.systemDefault()).toLocalDateTime());
             case null -> new NullValue();
             case Object o -> {
-                var parser = additionalMappers.get(value.getClass());
+                var parser = evaluationContext.getMapper(value.getClass());
                 yield Optional.ofNullable(parser)
                         .map(p -> p.apply(value))
                         .orElseGet(() -> {
@@ -174,6 +171,17 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
         var field = dotExpressionNode.field();
         var originalObject = object.asObject();
         var fieldValue = ReflectionUtil.accessField(originalObject, field);
-        return parseValue(fieldValue);
+        return parseValue(fieldValue, env);
     }
+
+    @Override
+    public Value visit(FunctionCallExpressionNode functionCallExpressionNode, EvaluationContext env, Object record) {
+        var function = functionCallExpressionNode.function();
+        var arguments = functionCallExpressionNode.arguments().stream()
+                .map(arg -> arg.accept(this, env, record))
+                .toList();
+
+        return env.getFunction(function).apply(arguments);
+    }
+
 }

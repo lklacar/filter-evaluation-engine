@@ -143,4 +143,12 @@ public class ExpressionParserVisitor extends FilterBaseVisitor<ExpressionNode> {
         var field = ctx.field.getText();
         return new DotExpressionNode(object, field);
     }
+
+    @Override
+    public ExpressionNode visitFunctionCallExpression(FilterParser.FunctionCallExpressionContext ctx) {
+        var function = ctx.function.getText();
+        var arguments = ctx.expression().stream().map(this::visit).toList();
+
+        return new FunctionCallExpressionNode(function, arguments);
+    }
 }

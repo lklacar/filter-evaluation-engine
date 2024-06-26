@@ -223,4 +223,16 @@ public interface FilterListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLessThanExpression(FilterParser.LessThanExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code functionCallExpression}
+	 * labeled alternative in {@link FilterParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCallExpression(FilterParser.FunctionCallExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code functionCallExpression}
+	 * labeled alternative in {@link FilterParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCallExpression(FilterParser.FunctionCallExpressionContext ctx);
 }

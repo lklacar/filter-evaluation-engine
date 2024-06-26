@@ -54,4 +54,9 @@ public record DateTimeValue(java.time.LocalDateTime value) implements Value {
     public Object asObject() {
         throw new FilterException("Cannot convert date time to object");
     }
+
+    @Override
+    public String asString() {
+        return value.toString();
+    }
 }

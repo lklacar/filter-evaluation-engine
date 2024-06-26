@@ -57,4 +57,9 @@ public record LongValue(Long value) implements Value {
     public Object asObject() {
         throw new FilterException("Cannot convert long to object");
     }
+
+    @Override
+    public String asString() {
+        return value.toString();
+    }
 }

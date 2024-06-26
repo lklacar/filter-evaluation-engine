@@ -38,4 +38,9 @@ public record NullValue() implements Value {
     public Object asObject() {
         throw new UnsupportedOperationException("Cannot convert null to object");
     }
+
+    @Override
+    public String asString() {
+        return "null";
+    }
 }

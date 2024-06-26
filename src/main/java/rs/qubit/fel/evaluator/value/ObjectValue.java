@@ -40,5 +40,10 @@ public record ObjectValue(Object value) implements Value {
     public Object asObject() {
         return value;
     }
+
+    @Override
+    public String asString() {
+        return value.toString();
+    }
 }
 

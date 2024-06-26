@@ -14,4 +14,6 @@ public sealed interface Value permits ObjectValue, BooleanValue, DateTimeValue, 
     boolean greaterThanOrEquals(Value right);
 
     Object asObject();
+
+    String asString();
 }

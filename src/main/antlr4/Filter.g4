@@ -19,6 +19,7 @@ expression
     | BOOLEAN                                                                                     # booleanExpression
     | NULL                                                                                        # nullExpression
     | year=LONG '-' month=LONG '-' day=LONG ('T' hour=LONG ':' minute=LONG ':' second=LONG)?      # dateTimeExpression
+    | function=IDENTIFIER LEFT_PAREN (expression (COMMA expression)*)? RIGHT_PAREN                # functionCallExpression
     ;
 
 

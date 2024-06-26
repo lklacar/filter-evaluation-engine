@@ -43,4 +43,9 @@ public record StringValue(String value) implements Value {
     public Object asObject() {
         throw new FilterException("Cannot convert string to object");
     }
+
+    @Override
+    public String asString() {
+        return value;
+    }
 }

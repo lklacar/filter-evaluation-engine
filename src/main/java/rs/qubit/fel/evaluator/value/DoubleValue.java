@@ -57,4 +57,9 @@ public record DoubleValue(double value) implements Value {
     public Object asObject() {
         throw new FilterException("Cannot convert double to object");
     }
+
+    @Override
+    public String asString() {
+        return String.valueOf(value);
+    }
 }
