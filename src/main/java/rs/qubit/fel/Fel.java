@@ -17,7 +17,7 @@ public class Fel {
         var evaluator = new FilterEvaluator();
         var filterAst = parser.parse(filter);
 
-        return new FelPredicate(evaluationContext) {
+        return new FelPredicate(evaluationContext, filterAst) {
 
             @Override
             public boolean test(Object o) {

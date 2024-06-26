@@ -818,6 +818,46 @@ public class Main {
 
 By using a reusable evaluation context with `FilterFactory`, you can streamline the process of creating and applying filters in your application, ensuring consistent and efficient filtering logic.
 
+## Accessing the Abstract Syntax Tree (AST)
+
+Filter Expression Language (FEL) allows you to access the Abstract Syntax Tree (AST) of your filter expressions. The AST represents the syntactic structure of your filter expression in a tree format, which can be useful for debugging, analysis, or further manipulation of the expression.
+
+### Example: Accessing the AST
+
+Here's an example that demonstrates how to access and print the AST of a filter expression:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        var predicate = Fel.filter("toUpperCase(firstName) = 'JOHN' || age > 18");
+
+        var ast = predicate.getAst();
+
+        System.out.println(ast);
+    }
+}
+```
+
+### Explanation
+
+1. **Create a Filter Expression:** Use the `Fel.filter` method to define your filter expression. In this example, the filter checks if the uppercase version of `firstName` is `"JOHN"` or if `age` is greater than `18`.
+
+2. **Access the AST:** Call the `getAst` method on the filter predicate to retrieve the AST of the filter expression.
+
+3. **Print the AST:** Print the AST to the console for inspection.
+
+### Benefits of Accessing the AST
+
+- **Debugging:** The AST provides a detailed view of the filter expression's structure, making it easier to identify and fix issues.
+- **Analysis:** Analyze the filter expression's structure to understand how it is parsed and evaluated.
+- **Manipulation:** Modify the AST for advanced use cases, such as dynamically altering the filter expression.
+
+By accessing the AST, you can gain deeper insights into how FEL processes filter expressions and leverage this information for various advanced use cases in your application.
+
+---
+
+This section provides an overview of how to access and utilize the AST in the Filter Expression Language (FEL) library. For more detailed documentation and examples, please refer to the project's repository.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue to improve the library.
