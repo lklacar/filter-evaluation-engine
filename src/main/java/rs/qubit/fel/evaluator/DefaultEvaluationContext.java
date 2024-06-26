@@ -56,8 +56,7 @@ public class DefaultEvaluationContext implements EvaluationContext {
 
     @Override
     public Function<Object, Value> getMapper(Class<?> aClass) {
-        return Optional.ofNullable(mappers.get(aClass))
-                .orElseThrow(() -> new FilterException("Mapper not found: " + aClass));
+        return mappers.get(aClass);
     }
 
     @Override
