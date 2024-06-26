@@ -47,4 +47,9 @@ public record LongValue(Long value) implements Value {
             default -> throw new FilterException("Cannot compare long with " + right.getClass().getSimpleName());
         };
     }
+
+    @Override
+    public Object asObject() {
+        throw new FilterException("Cannot convert long to object");
+    }
 }

@@ -29,6 +29,18 @@ public class FilterBaseListener implements FilterListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDotExpression(FilterParser.DotExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDotExpression(FilterParser.DotExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIdentifierExpression(FilterParser.IdentifierExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}

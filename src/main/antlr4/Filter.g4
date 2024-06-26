@@ -18,11 +18,14 @@ expression
     | BOOLEAN                                                                                     # booleanExpression
     | NULL                                                                                        # nullExpression
     | year=LONG '-' month=LONG '-' day=LONG ('T' hour=LONG ':' minute=LONG ':' second=LONG)?      # dateTimeExpression
+    | object=expression DOT field=IDENTIFIER                                                      # dotExpression
     ;
 
 
 
-
+DOT
+    : '.'
+    ;
 
 LEFT_PAREN
     : '('

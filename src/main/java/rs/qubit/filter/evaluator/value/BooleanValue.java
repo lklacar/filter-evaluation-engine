@@ -35,4 +35,9 @@ public record BooleanValue(boolean value) implements Value {
     public boolean greaterThanOrEquals(Value right) {
         throw new FilterException("Cannot compare boolean values");
     }
+
+    @Override
+    public Object asObject() {
+        throw new FilterException("Cannot convert boolean to object");
+    }
 }

@@ -138,4 +138,10 @@ public class ExpressionParserVisitor extends FilterBaseVisitor<ExpressionNode> {
         return new LessThanExpressionNode(left, right);
     }
 
+    @Override
+    public ExpressionNode visitDotExpression(FilterParser.DotExpressionContext ctx) {
+        var object = visit(ctx.object);
+        var field = ctx.field.getText();
+        return new DotExpressionNode(object, field);
+    }
 }

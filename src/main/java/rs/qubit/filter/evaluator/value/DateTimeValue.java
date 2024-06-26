@@ -49,4 +49,9 @@ public record DateTimeValue(java.time.LocalDateTime value) implements Value {
             default -> throw new FilterException("Cannot compare date time with " + right.getClass().getSimpleName());
         };
     }
+
+    @Override
+    public Object asObject() {
+        throw new FilterException("Cannot convert date time to object");
+    }
 }

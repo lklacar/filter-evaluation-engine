@@ -20,6 +20,18 @@ public interface FilterListener extends ParseTreeListener {
 	 */
 	void exitDateTimeExpression(FilterParser.DateTimeExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code dotExpression}
+	 * labeled alternative in {@link FilterParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterDotExpression(FilterParser.DotExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code dotExpression}
+	 * labeled alternative in {@link FilterParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitDotExpression(FilterParser.DotExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code identifierExpression}
 	 * labeled alternative in {@link FilterParser#expression}.
 	 * @param ctx the parse tree

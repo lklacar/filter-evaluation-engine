@@ -47,4 +47,9 @@ public record DoubleValue(double value) implements Value {
             default -> throw new FilterException("Cannot compare double with " + right.getClass().getSimpleName());
         };
     }
+
+    @Override
+    public Object asObject() {
+        throw new FilterException("Cannot convert double to object");
+    }
 }

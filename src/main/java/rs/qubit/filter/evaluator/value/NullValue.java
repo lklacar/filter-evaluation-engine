@@ -33,4 +33,9 @@ public record NullValue() implements Value {
     public boolean greaterThanOrEquals(Value right) {
         throw new UnsupportedOperationException("Cannot compare null with " + right.getClass().getSimpleName());
     }
+
+    @Override
+    public Object asObject() {
+        throw new UnsupportedOperationException("Cannot convert null to object");
+    }
 }

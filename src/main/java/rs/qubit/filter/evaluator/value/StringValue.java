@@ -38,4 +38,9 @@ public record StringValue(String value) implements Value {
     public boolean greaterThanOrEquals(Value right) {
         throw new FilterException("Cannot compare string values");
     }
+
+    @Override
+    public Object asObject() {
+        throw new FilterException("Cannot convert string to object");
+    }
 }

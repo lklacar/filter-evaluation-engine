@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import rs.qubit.filter.engine.FilterEngine;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class Main {
@@ -14,31 +13,36 @@ public class Main {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
+    static class Address {
+        private String street;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     static class User {
         private String firstName;
         private String lastName;
-        private int age;
-        private LocalDateTime createdAt = LocalDateTime.now();
+        private Address address;
     }
 
     public static void main(String[] args) {
 
-        var filterEngine = new FilterEngine();
+        var filterEngine = FilterEngine.create();
 
         var users = List.of(
-            new User("John", "Doe", 30, LocalDateTime.now().minusDays(1)),
-            new User("Jane", "Doe", 25, LocalDateTime.now().minusDays(2)),
-            new User("Alice", "Smith", 35, LocalDateTime.now().minusDays(3)),
-            new User("Bob", "Smith", 40, LocalDateTime.now().minusDays(4))
+                User.builder().firstName("John").lastName("Doe").address(Address.builder().street("Wall Street").build()).build(),
+                User.builder().firstName("Jane").lastName("Doe").address(Address.builder().street("Wall Street").build()).build(),
+                User.builder().firstName("Alice").lastName("Smith").address(Address.builder().street("Main Street").build()).build()
         );
 
-        var filteredUsers = filterEngine.filter(
-                users.stream(),
-                "createdAt > 2021-01-01T00:00:00"
-        );
+        var filter = "address.street = 'Main Street'";
 
-        filteredUsers.forEach(System.out::println);
+        var filteredUsers = filterEngine.filter(users.stream(), filter).toList();
 
+        System.out.println(filteredUsers);
 
     }
 }

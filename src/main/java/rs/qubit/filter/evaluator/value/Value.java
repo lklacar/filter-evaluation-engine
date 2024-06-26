@@ -1,6 +1,6 @@
 package rs.qubit.filter.evaluator.value;
 
-public sealed interface Value permits BooleanValue, DateTimeValue, DoubleValue, LongValue, NullValue, StringValue {
+public sealed interface Value permits ObjectValue, BooleanValue, DateTimeValue, DoubleValue, LongValue, NullValue, StringValue {
     boolean asBoolean();
 
     boolean greaterThan(Value value);
@@ -12,4 +12,6 @@ public sealed interface Value permits BooleanValue, DateTimeValue, DoubleValue, 
     boolean lessThanOrEquals(Value right);
 
     boolean greaterThanOrEquals(Value right);
+
+    Object asObject();
 }
