@@ -8,6 +8,19 @@ Filter Expression Language (FEL) is a lightweight, open-source Java library that
 - Integration with Java streams
 - Lightweight and easy to use
 
+## Basic Usage
+Basic usage of FEL involves defining a filter expression as a string and applying it to a collection of objects using Java streams. 
+Here's a quick example to get you started:
+
+```java
+var filterString = "(address.street = 'Main Street' && age > 30) || toUpperCase(firstName) = 'JOHN'"; 
+
+var filteredUsers = users
+      .stream()
+      .filter(Fel.filter(filterString))
+      .toList();
+```
+
 ## Installation
 
 To include FEL in your project, add the following dependency to your `pom.xml` if you are using Maven:
