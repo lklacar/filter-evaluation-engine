@@ -99,7 +99,7 @@ FEL expressions support a variety of operations to filter your data effectively.
 ### Basic Expressions
 
 - **Parentheses:** `(expression)` - Group expressions to control evaluation order.
-- **Logical NOT:** `NOT expression` - Negate a boolean expression.
+- **Logical NOT:** `! expression` - Negate a boolean expression.
 - **Equality:** `left = right` - Check if two expressions are equal.
 - **Inequality:** `left != right` - Check if two expressions are not equal.
 - **Comparison:**
@@ -110,8 +110,8 @@ FEL expressions support a variety of operations to filter your data effectively.
 
 ### Logical Operations
 
-- **Logical AND:** `left AND right` - Combine two expressions with logical AND.
-- **Logical OR:** `left OR right` - Combine two expressions with logical OR.
+- **Logical AND:** `left && right` - Combine two expressions with logical &&.
+- **Logical OR:** `left || right` - Combine two expressions with logical ||.
 
 ### Literals
 
@@ -132,8 +132,8 @@ FEL expressions support a variety of operations to filter your data effectively.
 
 - **Equality Check:** `firstName = 'John'` - Filters objects where `firstName` is `John`.
 - **Inequality Check:** `age != 30` - Filters objects where `age` is not `30`.
-- **Logical AND:** `firstName = 'John' AND lastName = 'Doe'` - Filters objects where `firstName` is `John` and `lastName` is `Doe`.
-- **Logical OR:** `age < 20 OR age > 60` - Filters objects where `age` is less than `20` or greater than `60`.
+- **Logical AND:** `firstName = 'John' && lastName = 'Doe'` - Filters objects where `firstName` is `John` and `lastName` is `Doe`.
+- **Logical OR:** `age < 20 || age > 60` - Filters objects where `age` is less than `20` or greater than `60`.
 - **Nested Fields:** `address.street = 'Main Street'` - Filters objects where `address.street` is `Main Street`.
 
 ## Contributing
