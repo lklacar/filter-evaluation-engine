@@ -828,7 +828,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries or feedback, please reach out to [Luka](mailto:luka@example.com).
+For any inquiries or feedback, feel free to open an issue.
 
 ---
 
