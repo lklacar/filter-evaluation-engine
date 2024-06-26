@@ -29,7 +29,7 @@ To include FEL in your project, add the following dependency to your `pom.xml` i
 <dependency>
   <groupId>rs.qubit</groupId>
   <artifactId>filter-expression-language</artifactId>
-  <version>1.0.0</version>
+  <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
 
