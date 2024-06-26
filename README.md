@@ -136,6 +136,159 @@ FEL expressions support a variety of operations to filter your data effectively.
 - **Logical OR:** `age < 20 || age > 60` - Filters objects where `age` is less than `20` or greater than `60`.
 - **Nested Fields:** `address.street = 'Main Street'` - Filters objects where `address.street` is `Main Street`.
 
+## Built-in Functions
+
+Filter Expression Language (FEL) provides a set of built-in functions that can be used to perform various operations within your filter expressions. These functions enhance the expressiveness and flexibility of your filters by allowing you to manipulate data and perform common operations directly within the expressions.
+
+### Function List
+
+Here is a list of the available built-in functions in FEL:
+
+- **`abs(value)`**: Returns the absolute value of a number.
+  ```java
+  abs(-5) // returns 5
+  ```
+
+- **`ceil(value)`**: Rounds a number up to the nearest integer.
+  ```java
+  ceil(4.2) // returns 5
+  ```
+
+- **`contains(string, substring)`**: Checks if a string contains a specified substring.
+  ```java
+  contains('Hello, World', 'World') // returns true
+  ```
+
+- **`fabs(value)`**: Returns the absolute value of a floating-point number.
+  ```java
+  fabs(-3.14) // returns 3.14
+  ```
+
+- **`floor(value)`**: Rounds a number down to the nearest integer.
+  ```java
+  floor(4.7) // returns 4
+  ```
+
+- **`length(string)`**: Returns the length of a string.
+  ```java
+  length('Hello') // returns 5
+  ```
+
+- **`max(value1, value2)`**: Returns the maximum of two values.
+  ```java
+  max(10, 20) // returns 20
+  ```
+
+- **`min(value1, value2)`**: Returns the minimum of two values.
+  ```java
+  min(10, 20) // returns 10
+  ```
+
+- **`now()`**: Returns the current date and time as a `LocalDateTime`.
+  ```java
+  now() // returns the current LocalDateTime
+  ```
+
+- **`round(value)`**: Rounds a number to the nearest integer.
+  ```java
+  round(4.5) // returns 5
+  ```
+
+- **`substring(string, start, length)`**: Extracts a substring from a string.
+  ```java
+  substring('Hello, World', 7, 5) // returns 'World'
+  ```
+
+- **`toLowerCase(string)`**: Converts a string to lower case.
+  ```java
+  toLowerCase('HELLO') // returns 'hello'
+  ```
+
+- **`toUpperCase(string)`**: Converts a string to upper case.
+  ```java
+  toUpperCase('hello') // returns 'HELLO'
+  ```
+
+- **`trim(string)`**: Removes leading and trailing whitespace from a string.
+  ```java
+  trim('  Hello  ') // returns 'Hello'
+  ```
+
+### Date and Time Functions
+
+FEL includes functions to manipulate dates and times, making it easier to work with temporal data:
+
+- **`addDays(date, days)`**: Adds a specified number of days to a date.
+  ```java
+  addDays(now(), 5) // returns the date and time 5 days from now
+  ```
+
+- **`addMonths(date, months)`**: Adds a specified number of months to a date.
+  ```java
+  addMonths(now(), 2) // returns the date and time 2 months from now
+  ```
+
+- **`addYears(date, years)`**: Adds a specified number of years to a date.
+  ```java
+  addYears(now(), 1) // returns the date and time 1 year from now
+  ```
+
+- **`day(date)`**: Extracts the day of the month from a date.
+  ```java
+  day(now()) // returns the current day of the month
+  ```
+
+- **`dayOfWeek(date)`**: Extracts the day of the week from a date.
+  ```java
+  dayOfWeek(now()) // returns the current day of the week
+  ```
+
+- **`hour(date)`**: Extracts the hour from a date.
+  ```java
+  hour(now()) // returns the current hour
+  ```
+
+- **`minute(date)`**: Extracts the minute from a date.
+  ```java
+  minute(now()) // returns the current minute
+  ```
+
+- **`month(date)`**: Extracts the month from a date.
+  ```java
+  month(now()) // returns the current month
+  ```
+
+- **`second(date)`**: Extracts the second from a date.
+  ```java
+  second(now()) // returns the current second
+  ```
+
+- **`year(date)`**: Extracts the year from a date.
+  ```java
+  year(now()) // returns the current year
+  ```
+
+### Using Built-in Functions in Expressions
+
+Here are some examples of how to use these built-in functions within FEL filter expressions:
+
+#### Example 1: Filtering Users by Uppercase First Name
+```java
+var filter = Fel.filter("toUpperCase(firstName) = 'JOHN'");
+```
+
+#### Example 2: Filtering Products by Availability and Price Range
+```java
+var filter = Fel.filter("inStock = true && price < 500");
+```
+
+#### Example 3: Filtering Events by Upcoming Date
+```java
+var filter = Fel.filter("addDays(eventDate, 7) > now()");
+```
+
+These functions enhance the power and flexibility of FEL, allowing for more complex and expressive filter conditions. Use them to tailor your filtering logic to meet specific application requirements.
+
 ## Internal Types (`Value`)
 
 In Filter Expression Language (FEL), various internal types are used to represent different kinds of values in filter expressions. These internal types extend the `Value` class and provide a consistent way to handle different data types during filtering operations. Here’s an overview of the internal types used in FEL:
