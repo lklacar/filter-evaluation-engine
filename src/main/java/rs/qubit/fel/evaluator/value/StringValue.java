@@ -2,6 +2,8 @@ package rs.qubit.fel.evaluator.value;
 
 import rs.qubit.fel.exception.FilterException;
 
+import java.time.LocalDateTime;
+
 public record StringValue(String value) implements Value {
     @Override
     public boolean asBoolean() {
@@ -57,5 +59,10 @@ public record StringValue(String value) implements Value {
     @Override
     public Double asDouble() {
         throw new FilterException("Cannot convert string to double");
+    }
+
+    @Override
+    public LocalDateTime asDateTime() {
+        throw new FilterException("Cannot convert string to date time");
     }
 }

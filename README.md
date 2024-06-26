@@ -779,6 +779,104 @@ These examples showcase how FEL can be used to filter diverse datasets effective
 
 This section provides concrete examples using real-world data scenarios, demonstrating how FEL can be applied to filter users, products, and other entities based on various criteria.
 
+## Using Factory for Reusable Context
+
+Filter Expression Language (FEL) allows you to create a reusable evaluation context for your filter expressions. This is particularly useful when you have custom functions or variables that you want to reuse across multiple filter expressions. By using a `FilterFactory` with a pre-defined context, you can efficiently create and apply filters without redefining the context each time.
+
+### Example: Reusing Context with Custom Function
+
+Here's an example that demonstrates how to create a reusable evaluation context with a custom function and use it to filter a list of users.
+
+```java
+package rs.qubit.fel;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import rs.qubit.fel.evaluator.context.DefaultEvaluationContext;
+import rs.qubit.fel.evaluator.value.NullValue;
+import rs.qubit.fel.evaluator.value.StringValue;
+
+import java.time.Instant;
+import java.util.List;
+
+public class Main {
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    static class User {
+        private String firstName;
+        private String lastName;
+        private Instant dateOfBirth;
+    }
+
+    public static void main(String[] args) {
+
+        var users = List.of(
+                new User("John", "Doe", Instant.parse("1990-01-01T00:00:00Z")),
+                new User("Jane", "Doe", Instant.parse("1995-01-01T00:00:00Z"))
+        );
+
+        // Create a reusable evaluation context
+        var context = new DefaultEvaluationContext();
+        context.addFunction("toUppercase", values -> {
+            var parameter = values.get(0);
+            if (parameter instanceof NullValue) {
+                return new NullValue();
+            }
+
+            return new StringValue(parameter.asString().toUpperCase());
+        });
+
+        // Create a FilterFactory with the reusable context
+        var filterFactory = new FilterFactory(context);
+
+        // Create a filter using the factory
+        var predicate = filterFactory.createFilter("toUppercase(firstName) = 'JOHN'");
+
+        // Apply the filter to the list of users
+        var filteredUsers = users.stream()
+                .filter(predicate)
+                .toList();
+
+        System.out.println(filteredUsers);
+    }
+}
+```
+
+### Explanation
+
+1. **Define Your Classes:** Create the `User` class with fields for `firstName`, `lastName`, and `dateOfBirth`.
+
+2. **Initialize Your Data:** Create a list of users with different names and dates of birth.
+
+3. **Create a Reusable Evaluation Context:**
+  - Instantiate a `DefaultEvaluationContext`.
+  - Add a custom function (`toUppercase`) to the context. This function converts a string to uppercase, handling null values appropriately.
+
+4. **Create a `FilterFactory`:**
+  - Instantiate a `FilterFactory` with the reusable context.
+  - This factory will use the same context for creating filters, ensuring consistency and reusability of the custom functions.
+
+5. **Create a Filter Using the Factory:**
+  - Use the `createFilter` method of the `FilterFactory` to define your filter expression. In this example, the filter checks if the uppercase version of `firstName` is `"JOHN"`.
+
+6. **Apply the Filter and Collect Results:**
+  - Use Java streams to apply the filter and collect the filtered results.
+
+7. **Output the Results:** Print the filtered list of users.
+
+### Benefits of Using a Reusable Context
+
+- **Consistency:** Ensures that all filters created with the factory use the same set of custom functions and variables.
+- **Efficiency:** Reduces the overhead of redefining the context for each filter expression.
+- **Maintainability:** Makes it easier to manage and update custom functions and variables in one place.
+
+By using a reusable evaluation context with `FilterFactory`, you can streamline the process of creating and applying filters in your application, ensuring consistent and efficient filtering logic.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue to improve the library.

@@ -17,7 +17,7 @@ public abstract class FelPredicate implements Predicate<Object> {
 
     private final EvaluationContext context;
 
-    public FelPredicate(DefaultEvaluationContext context) {
+    public FelPredicate(EvaluationContext context) {
         this.context = context;
     }
 

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rs.qubit.fel.evaluator.DefaultEvaluationContext;
+import rs.qubit.fel.evaluator.FelFunction;
 import rs.qubit.fel.evaluator.value.NullValue;
 import rs.qubit.fel.evaluator.value.StringValue;
 
@@ -30,15 +32,20 @@ public class Main {
                 new User("Jane", "Doe", Instant.parse("1995-01-01T00:00:00Z"))
         );
 
-        var predicate = Fel.filter("toUppercase(firstName) = 'JOHN'")
-                .withFunction("toUppercase", values -> {
-                    var parameter = values.get(0);
-                    if (parameter instanceof NullValue) {
-                        return new NullValue();
-                    }
+        var context = new DefaultEvaluationContext();
+        context.addFunction("toUppercase", values -> {
+            var parameter = values.get(0);
+            if (parameter instanceof NullValue) {
+                return new NullValue();
+            }
 
-                    return new StringValue(parameter.asString().toUpperCase());
-                });
+            return new StringValue(parameter.asString().toUpperCase());
+        });
+
+
+        var filterFactory = new FilterFactory(context);
+        var predicate = filterFactory.crateFilter("toUppercase(firstName) = 'JOHN'");
+
 
         var filteredUsers = users.stream()
                 .filter(predicate)

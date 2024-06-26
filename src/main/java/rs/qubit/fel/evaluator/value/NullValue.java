@@ -1,5 +1,7 @@
 package rs.qubit.fel.evaluator.value;
 
+import java.time.LocalDateTime;
+
 public record NullValue() implements Value {
     @Override
     public boolean asBoolean() {
@@ -52,5 +54,10 @@ public record NullValue() implements Value {
     @Override
     public Double asDouble() {
         throw new UnsupportedOperationException("Cannot convert null to double");
+    }
+
+    @Override
+    public LocalDateTime asDateTime() {
+        throw new UnsupportedOperationException("Cannot convert null to date time");
     }
 }

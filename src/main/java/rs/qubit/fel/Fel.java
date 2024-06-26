@@ -8,19 +8,20 @@ import rs.qubit.fel.parser.FilterParser;
 
 public class Fel {
 
-
     public static FelPredicate filter(String filter) {
+        return filter(filter, new DefaultEvaluationContext());
+    }
+
+    public static FelPredicate filter(String filter, EvaluationContext evaluationContext) {
         var parser = new FilterParser();
         var evaluator = new FilterEvaluator();
         var filterAst = parser.parse(filter);
-        var defaultContext = new DefaultEvaluationContext();
 
-
-        return new FelPredicate(defaultContext) {
+        return new FelPredicate(evaluationContext) {
 
             @Override
             public boolean test(Object o) {
-                return filterAst.accept(evaluator, defaultContext, o).asBoolean();
+                return filterAst.accept(evaluator, evaluationContext, o).asBoolean();
             }
         };
     }
