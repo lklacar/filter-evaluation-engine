@@ -33,7 +33,7 @@ public class FilterParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'-'", "'T'", "':'", "'('", "')'", "'['", "']'", "','", "'='", 
-			"'!='", "'>'", "'<'", "'>='", "'<='", null, null, null, null, "'null'", 
+			"'!='", "'>'", "'<'", "'>='", "'<='", "'||'", "'&&'", "'!'", null, "'null'", 
 			null, null, null, null, "'.'"
 		};
 	}

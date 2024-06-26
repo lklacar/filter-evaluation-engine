@@ -69,15 +69,15 @@ LTE
     ;
 
 OR
-    : 'OR' | 'or'
+    : '||'
     ;
 
 AND
-    : 'AND' | 'and'
+    : '&&'
     ;
 
 NOT
-    : 'NOT' | 'not'
+    : '!'
     ;
 
 STRING

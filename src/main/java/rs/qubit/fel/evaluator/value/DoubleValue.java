@@ -12,6 +12,7 @@ public record DoubleValue(double value) implements Value {
     public boolean greaterThan(Value value) {
         return switch (value) {
             case DoubleValue doubleValue -> this.value > doubleValue.value;
+            case LongValue longValue -> this.value > longValue.value();
             default -> throw new FilterException("Cannot compare double with " + value.getClass().getSimpleName());
         };
     }
@@ -20,6 +21,7 @@ public record DoubleValue(double value) implements Value {
     public boolean lessThan(Value value) {
         return switch (value) {
             case DoubleValue doubleValue -> this.value < doubleValue.value;
+            case LongValue longValue -> this.value < longValue.value();
             default -> throw new FilterException("Cannot compare double with " + value.getClass().getSimpleName());
         };
     }
@@ -28,6 +30,7 @@ public record DoubleValue(double value) implements Value {
     public boolean equal(Value value) {
         return switch (value) {
             case DoubleValue doubleValue -> this.value == doubleValue.value;
+            case LongValue longValue -> this.value == longValue.value();
             default -> throw new FilterException("Cannot compare double with " + value.getClass().getSimpleName());
         };
     }
@@ -36,6 +39,7 @@ public record DoubleValue(double value) implements Value {
     public boolean lessThanOrEquals(Value right) {
         return switch (right) {
             case DoubleValue doubleValue -> this.value <= doubleValue.value;
+            case LongValue longValue -> this.value <= longValue.value();
             default -> throw new FilterException("Cannot compare double with " + right.getClass().getSimpleName());
         };
     }
@@ -44,6 +48,7 @@ public record DoubleValue(double value) implements Value {
     public boolean greaterThanOrEquals(Value right) {
         return switch (right) {
             case DoubleValue doubleValue -> this.value >= doubleValue.value;
+            case LongValue longValue -> this.value >= longValue.value();
             default -> throw new FilterException("Cannot compare double with " + right.getClass().getSimpleName());
         };
     }

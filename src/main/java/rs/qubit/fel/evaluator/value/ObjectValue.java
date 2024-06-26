@@ -20,7 +20,10 @@ public record ObjectValue(Object value) implements Value {
 
     @Override
     public boolean equal(Value value) {
-        throw new FilterException("Cannot compare object to " + value.getClass().getSimpleName());
+        return switch (value) {
+            case NullValue nullValue -> this.value == null;
+            default -> throw new FilterException("Cannot compare object to " + value.getClass().getSimpleName());
+        };
     }
 
     @Override
