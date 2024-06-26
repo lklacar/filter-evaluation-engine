@@ -821,6 +821,7 @@ By using a reusable evaluation context with `FilterFactory`, you can streamline 
 ## Accessing the Abstract Syntax Tree (AST)
 
 Filter Expression Language (FEL) allows you to access the Abstract Syntax Tree (AST) of your filter expressions. The AST represents the syntactic structure of your filter expression in a tree format, which can be useful for debugging, analysis, or further manipulation of the expression.
+Predicate can also be created from AST. `Fel.fromAst` method is used to create a filter predicate from the AST of the filter expression.
 
 ### Example: Accessing the AST
 
@@ -829,10 +830,11 @@ Here's an example that demonstrates how to access and print the AST of a filter 
 ```java
 public class Main {
     public static void main(String[] args) {
-        var predicate = Fel.filter("toUpperCase(firstName) = 'JOHN' || age > 18");
-
+        var predicate = Fel.filter("toUppercase(firstName) = 'JOHN' || age > 18");
         var ast = predicate.getAst();
-
+        
+        var predicateFromAst = Fel.fromAst(ast);
+        
         System.out.println(ast);
     }
 }

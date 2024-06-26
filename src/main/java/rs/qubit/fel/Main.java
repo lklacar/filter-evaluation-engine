@@ -13,6 +13,9 @@ public class Main {
     public static void main(String[] args) {
         var predicate = Fel.filter("toUppercase(firstName) = 'JOHN' || age > 18");
         var ast = predicate.getAst();
+
+        var predicateFromAst = Fel.fromAst(ast);
+
         System.out.println(ast);
     }
 
