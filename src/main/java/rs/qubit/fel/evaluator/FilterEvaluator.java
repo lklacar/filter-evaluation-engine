@@ -1,6 +1,9 @@
 package rs.qubit.fel.evaluator;
 
+import lombok.Getter;
+import lombok.Setter;
 import rs.qubit.fel.evaluator.value.*;
+import rs.qubit.fel.exception.FilterException;
 import rs.qubit.fel.parser.ast.*;
 import rs.qubit.fel.reflection.ReflectionUtil;
 import rs.qubit.fel.visitor.ExpressionVisitor;
@@ -9,21 +12,19 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+@Setter
+@Getter
 public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationContext, Object> {
 
-    public final Map<Class<?>, Function<Object, Value>> additionalValueParsers;
+    public Map<Class<?>, Function<Object, Value>> additionalMappers;
 
-    public FilterEvaluator(Map<Class<?>, Function<Object, Value>> additionalValueParsers) {
-        this.additionalValueParsers = additionalValueParsers;
-    }
-
-    public boolean evaluate(ExpressionNode filter, EvaluationContext env, Object record) {
-        var result = filter.accept(this, env, record);
-        return result != null && result.asBoolean();
+    public FilterEvaluator() {
+        this.additionalMappers = new HashMap<>();
     }
 
     @Override
@@ -99,10 +100,17 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
             case Instant i -> new DateTimeValue(i.atZone(ZoneId.systemDefault()).toLocalDateTime());
             case null -> new NullValue();
             case Object o -> {
-                var parser = additionalValueParsers.get(value.getClass());
+                var parser = additionalMappers.get(value.getClass());
                 yield Optional.ofNullable(parser)
                         .map(p -> p.apply(value))
-                        .orElseGet(() -> new ObjectValue(o));
+                        .orElseGet(() -> {
+                            var isJavaObject = value.getClass().getName().startsWith("java");
+                            if (isJavaObject) {
+                                throw new FilterException("Cannot convert java object %s to a filter value".formatted(value.getClass().getName()));
+                            }
+
+                            return new ObjectValue(o);
+                        });
             }
         };
     }
