@@ -43,4 +43,14 @@ public record NullValue() implements Value {
     public String asString() {
         return "null";
     }
+
+    @Override
+    public Long asLong() {
+        throw new UnsupportedOperationException("Cannot convert null to long");
+    }
+
+    @Override
+    public Double asDouble() {
+        throw new UnsupportedOperationException("Cannot convert null to double");
+    }
 }

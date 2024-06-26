@@ -62,4 +62,14 @@ public record LongValue(Long value) implements Value {
     public String asString() {
         return value.toString();
     }
+
+    @Override
+    public Long asLong() {
+        return value;
+    }
+
+    @Override
+    public Double asDouble() {
+        return value.doubleValue();
+    }
 }

@@ -62,4 +62,14 @@ public record DoubleValue(double value) implements Value {
     public String asString() {
         return String.valueOf(value);
     }
+
+    @Override
+    public Long asLong() {
+        throw new FilterException("Cannot convert double to long");
+    }
+
+    @Override
+    public Double asDouble() {
+        return value;
+    }
 }

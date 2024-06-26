@@ -3,6 +3,7 @@ package rs.qubit.fel;
 import lombok.Getter;
 import rs.qubit.fel.evaluator.DefaultEvaluationContext;
 import rs.qubit.fel.evaluator.EvaluationContext;
+import rs.qubit.fel.evaluator.FelFunction;
 import rs.qubit.fel.evaluator.value.Value;
 
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public abstract class FelPredicate implements Predicate<Object> {
         return this;
     }
 
-    public FelPredicate withFunction(String name, Function<List<Value>, Value> function) {
+    public FelPredicate withFunction(String name, FelFunction function) {
         context.addFunction(name, function);
         return this;
     }

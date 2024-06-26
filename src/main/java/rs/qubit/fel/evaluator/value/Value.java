@@ -1,5 +1,7 @@
 package rs.qubit.fel.evaluator.value;
 
+import java.time.LocalDateTime;
+
 public sealed interface Value permits ObjectValue, BooleanValue, DateTimeValue, DoubleValue, LongValue, NullValue, StringValue {
     boolean asBoolean();
 
@@ -16,4 +18,10 @@ public sealed interface Value permits ObjectValue, BooleanValue, DateTimeValue, 
     Object asObject();
 
     String asString();
+
+    Long asLong();
+
+    Double asDouble();
+
+    LocalDateTime asDateTime();
 }

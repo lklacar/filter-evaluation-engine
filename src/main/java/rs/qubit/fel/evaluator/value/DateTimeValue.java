@@ -59,4 +59,14 @@ public record DateTimeValue(java.time.LocalDateTime value) implements Value {
     public String asString() {
         return value.toString();
     }
+
+    @Override
+    public Long asLong() {
+        throw new FilterException("Cannot convert date time to long");
+    }
+
+    @Override
+    public Double asDouble() {
+        throw new FilterException("Cannot convert date time to double");
+    }
 }

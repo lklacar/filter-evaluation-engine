@@ -48,4 +48,14 @@ public record StringValue(String value) implements Value {
     public String asString() {
         return value;
     }
+
+    @Override
+    public Long asLong() {
+        throw new FilterException("Cannot convert string to long");
+    }
+
+    @Override
+    public Double asDouble() {
+        throw new FilterException("Cannot convert string to double");
+    }
 }

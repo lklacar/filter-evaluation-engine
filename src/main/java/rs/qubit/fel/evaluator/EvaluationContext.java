@@ -13,5 +13,5 @@ public interface EvaluationContext {
 
     <T> void addMapper(Class<T> type, Function<T, Value> mapper);
 
-    void addFunction(String name, Function<List<Value>, Value> function);
+    void addFunction(String name, FelFunction function);
 }
