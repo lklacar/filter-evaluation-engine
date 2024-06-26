@@ -8,6 +8,8 @@ import rs.qubit.filter.engine.FilterEngine;
 
 import java.util.List;
 
+import static rs.qubit.filter.engine.FilterEngine.fel;
+
 public class Main {
 
     @Data
@@ -30,17 +32,16 @@ public class Main {
 
     public static void main(String[] args) {
 
-        var filterEngine = FilterEngine.create();
-
         var users = List.of(
                 User.builder().firstName("John").lastName("Doe").address(Address.builder().street("Wall Street").build()).build(),
                 User.builder().firstName("Jane").lastName("Doe").address(Address.builder().street("Wall Street").build()).build(),
                 User.builder().firstName("Alice").lastName("Smith").address(Address.builder().street("Main Street").build()).build()
         );
 
-        var filter = "address.street = 'Main Street'";
-
-        var filteredUsers = filterEngine.filter(users.stream(), filter).toList();
+        var filteredUsers = users
+                .stream()
+                .filter(fel("address.street = 'Main Street'"))
+                .toList();
 
         System.out.println(filteredUsers);
 

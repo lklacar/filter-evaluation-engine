@@ -1,5 +1,6 @@
 package rs.qubit.filter.engine;
 
+import rs.qubit.filter.Main;
 import rs.qubit.filter.evaluator.EvaluationContext;
 import rs.qubit.filter.evaluator.FilterEvaluator;
 import rs.qubit.filter.evaluator.value.Value;
@@ -8,6 +9,7 @@ import rs.qubit.filter.parser.FilterParser;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class FilterEngine {
@@ -33,6 +35,16 @@ public class FilterEngine {
 
     public static FilterEngine create() {
         return new Builder().build();
+    }
+
+    public Predicate<Object> createFilter(String filter) {
+        var parsedFilter = parser.parse(filter);
+        return item -> evaluator.evaluate(parsedFilter, new EvaluationContext(), item);
+    }
+
+    public static Predicate<Object> fel(String filter) {
+        var engine = FilterEngine.create();
+        return engine.createFilter(filter);
     }
 
     public static class Builder {
