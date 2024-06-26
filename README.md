@@ -860,6 +860,77 @@ By accessing the AST, you can gain deeper insights into how FEL processes filter
 
 This section provides an overview of how to access and utilize the AST in the Filter Expression Language (FEL) library. For more detailed documentation and examples, please refer to the project's repository.
 
+
+
+## Code Generation with FEL
+
+Filter Expression Language (FEL) is not only capable of evaluating filter expressions directly on collections of objects but also supports generating code from these expressions. This feature can be particularly useful when you need to transform your filter expressions into SQL queries or other forms of code to integrate with different data processing systems.
+
+### Generating SQL Code Example
+
+FEL can generate SQL queries from filter expressions, allowing you to apply the same filtering logic directly within your database. This can improve performance by offloading the filtering process to the database layer.
+
+Here's an example of how to generate a SQL query using FEL:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Define a filter expression
+        var predicate = Fel.filter("toUppercase(firstName) = 'JOHN' || age > 18");
+
+        // Create a SQL generator and context
+        var postgreSQLGenerator = new PostgreSQLGenerator();
+        var postgreSQLGenerationContext = new PostgreSQLGenerationContext();
+
+        // Generate the SQL query
+        var sql = predicate.generate(postgreSQLGenerator, postgreSQLGenerationContext);
+
+        // Print the generated SQL query
+        System.out.println(sql);
+    }
+}
+```
+
+### Explanation
+
+1. **Define a Filter Expression:** Use the `Fel.filter` method to create a filter predicate from a string-based filter expression. In this example, the filter checks if the uppercase version of `firstName` is `"JOHN"` or if `age` is greater than `18`.
+
+2. **Create a SQL Generator and Context:** Instantiate a `PostgreSQLGenerator` and a `PostgreSQLGenerationContext`. These classes are part of FEL's code generation feature and are used to generate SQL queries from filter expressions.
+
+3. **Generate the SQL Query:** Call the `generate` method on the filter predicate, passing in the SQL generator and context. This method transforms the filter expression into a SQL query.
+
+4. **Print the Generated SQL Query:** Output the generated SQL query to the console for inspection.
+
+### Benefits of Code Generation
+
+- **Database Integration:** Directly translate filter expressions into SQL queries, enabling efficient filtering at the database level.
+- **Flexibility:** Generate different types of code (e.g., SQL for various databases) by implementing custom code generators.
+- **Consistency:** Maintain consistent filtering logic across different layers of your application by using the same filter expressions.
+
+By leveraging FEL's code generation capabilities, you can seamlessly integrate complex filtering logic with your data processing systems, enhancing both performance and maintainability.
+
+### Custom Code Generators
+
+FEL supports creating custom code generators for different use cases. For example, you can create generators for other SQL dialects, NoSQL queries, or even custom scripts. This extensibility allows FEL to adapt to a wide range of applications and environments.
+In order to create a custom code generator you need to implement the `ExpressionVisitor` interface. Here is an example of a custom PostgreSQL code generator: 
+```java
+public class PostgreSQLGenerator implements ExpressionVisitor<String, PostgreSQLGenerationContext, Void> {
+  @Override
+  public String visit(OrExpressionNode orExpressionNode, PostgreSQLGenerationContext env, Void record) {
+    var left = orExpressionNode.left().accept(this, env, record);
+    var right = orExpressionNode.right().accept(this, env, record);
+
+    return String.format("(%s OR %s)", left, right);
+  }
+  
+  // Implement other visit methods for different expression nodes
+}
+```
+
+### Summary
+
+The ability to generate code from filter expressions makes FEL a powerful and versatile tool for integrating filtering logic across different layers of your application. Whether you need to filter data in-memory or translate expressions into database queries, FEL provides the tools to streamline and unify your filtering approach.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue to improve the library.

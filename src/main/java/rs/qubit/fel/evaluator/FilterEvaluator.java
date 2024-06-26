@@ -7,6 +7,7 @@ import rs.qubit.fel.exception.FilterException;
 import rs.qubit.fel.parser.ast.*;
 import rs.qubit.fel.reflection.ReflectionUtil;
 import rs.qubit.fel.visitor.ExpressionVisitor;
+import rs.qubit.fel.visitor.VisitorContext;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,11 +17,11 @@ import java.util.Optional;
 
 @Setter
 @Getter
-public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationContext, Object> {
+public class FilterEvaluator implements ExpressionVisitor<Value, VisitorContext, Object> {
 
 
     @Override
-    public Value visit(OrExpressionNode orExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(OrExpressionNode orExpressionNode, VisitorContext env, Object record) {
         var left = orExpressionNode.left().accept(this, env, record);
         var right = orExpressionNode.right().accept(this, env, record);
 
@@ -28,7 +29,7 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
     }
 
     @Override
-    public Value visit(AndExpressionNode andExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(AndExpressionNode andExpressionNode, VisitorContext env, Object record) {
         var left = andExpressionNode.left().accept(this, env, record);
         var right = andExpressionNode.right().accept(this, env, record);
 
@@ -36,7 +37,7 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
     }
 
     @Override
-    public Value visit(EqualsExpressionNode equalsExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(EqualsExpressionNode equalsExpressionNode, VisitorContext env, Object record) {
         var left = equalsExpressionNode.left().accept(this, env, record);
         var right = equalsExpressionNode.right().accept(this, env, record);
 
@@ -44,30 +45,30 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
     }
 
     @Override
-    public Value visit(NotExpressionNode notExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(NotExpressionNode notExpressionNode, VisitorContext env, Object record) {
         var value = notExpressionNode.expression().accept(this, env, record);
         return new BooleanValue(!value.asBoolean());
     }
 
     @Override
-    public Value visit(StringExpressionNode stringExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(StringExpressionNode stringExpressionNode, VisitorContext env, Object record) {
         var value = stringExpressionNode.value();
         return new StringValue(value);
     }
 
     @Override
-    public Value visit(BooleanExpressionNode booleanExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(BooleanExpressionNode booleanExpressionNode, VisitorContext env, Object record) {
         var value = booleanExpressionNode.value();
         return new BooleanValue(value);
     }
 
     @Override
-    public Value visit(NullExpressionNode nullExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(NullExpressionNode nullExpressionNode, VisitorContext env, Object record) {
         return new NullValue();
     }
 
     @Override
-    public Value visit(IdentifierExpressionNode identifierExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(IdentifierExpressionNode identifierExpressionNode, VisitorContext env, Object record) {
         var identifier = identifierExpressionNode.value();
 
         var value = ReflectionUtil.accessField(record, identifier);
@@ -75,7 +76,7 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
         return parseValue(value, env);
     }
 
-    private Value parseValue(Object value, EvaluationContext evaluationContext) {
+    private Value parseValue(Object value, VisitorContext evaluationContext) {
 
         return switch (value) {
             case Byte b -> new LongValue(Long.valueOf(b));
@@ -109,60 +110,60 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
     }
 
     @Override
-    public Value visit(LongExpressionNode longExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(LongExpressionNode longExpressionNode, VisitorContext env, Object record) {
         var value = longExpressionNode.value();
         return new LongValue(value);
     }
 
     @Override
-    public Value visit(DoubleExpressionNode doubleExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(DoubleExpressionNode doubleExpressionNode, VisitorContext env, Object record) {
         var value = doubleExpressionNode.value();
         return new DoubleValue(value);
     }
 
     @Override
-    public Value visit(DateTimeExpressionNode dateTimeExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(DateTimeExpressionNode dateTimeExpressionNode, VisitorContext env, Object record) {
         var value = dateTimeExpressionNode.date();
         return new DateTimeValue(value);
     }
 
     @Override
-    public Value visit(GreaterThanExpressionNode greaterThanExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(GreaterThanExpressionNode greaterThanExpressionNode, VisitorContext env, Object record) {
         var left = greaterThanExpressionNode.left().accept(this, env, record);
         var right = greaterThanExpressionNode.right().accept(this, env, record);
         return new BooleanValue(left.greaterThan(right));
     }
 
     @Override
-    public Value visit(LessThanOrEqualsExpressionNode lessThanOrEqualsExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(LessThanOrEqualsExpressionNode lessThanOrEqualsExpressionNode, VisitorContext env, Object record) {
         var left = lessThanOrEqualsExpressionNode.left().accept(this, env, record);
         var right = lessThanOrEqualsExpressionNode.right().accept(this, env, record);
         return new BooleanValue(left.lessThanOrEquals(right));
     }
 
     @Override
-    public Value visit(GreaterThanOrEqualsExpressionNode greaterThanOrEqualsExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(GreaterThanOrEqualsExpressionNode greaterThanOrEqualsExpressionNode, VisitorContext env, Object record) {
         var left = greaterThanOrEqualsExpressionNode.left().accept(this, env, record);
         var right = greaterThanOrEqualsExpressionNode.right().accept(this, env, record);
         return new BooleanValue(left.greaterThanOrEquals(right));
     }
 
     @Override
-    public Value visit(NotEqualsExpressionNode notEqualsExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(NotEqualsExpressionNode notEqualsExpressionNode, VisitorContext env, Object record) {
         var left = notEqualsExpressionNode.left().accept(this, env, record);
         var right = notEqualsExpressionNode.right().accept(this, env, record);
         return new BooleanValue(!left.equal(right));
     }
 
     @Override
-    public Value visit(LessThanExpressionNode lessThanExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(LessThanExpressionNode lessThanExpressionNode, VisitorContext env, Object record) {
         var left = lessThanExpressionNode.left().accept(this, env, record);
         var right = lessThanExpressionNode.right().accept(this, env, record);
         return new BooleanValue(left.lessThan(right));
     }
 
     @Override
-    public Value visit(DotExpressionNode dotExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(DotExpressionNode dotExpressionNode, VisitorContext env, Object record) {
         var object = dotExpressionNode.object().accept(this, env, record);
         var field = dotExpressionNode.field();
         var originalObject = object.asObject();
@@ -171,7 +172,7 @@ public class FilterEvaluator implements ExpressionVisitor<Value, EvaluationConte
     }
 
     @Override
-    public Value visit(FunctionCallExpressionNode functionCallExpressionNode, EvaluationContext env, Object record) {
+    public Value visit(FunctionCallExpressionNode functionCallExpressionNode, VisitorContext env, Object record) {
         var function = functionCallExpressionNode.function();
         var arguments = functionCallExpressionNode.arguments().stream()
                 .map(arg -> arg.accept(this, env, record))

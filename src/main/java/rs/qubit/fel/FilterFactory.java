@@ -1,12 +1,12 @@
 package rs.qubit.fel;
 
-import rs.qubit.fel.evaluator.EvaluationContext;
+import rs.qubit.fel.visitor.VisitorContext;
 
 public class FilterFactory {
 
-    private final EvaluationContext evaluationContext;
+    private final VisitorContext evaluationContext;
 
-    public FilterFactory(EvaluationContext evaluationContext) {
+    public FilterFactory(VisitorContext evaluationContext) {
         this.evaluationContext = evaluationContext;
     }
 

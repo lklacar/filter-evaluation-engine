@@ -3,6 +3,7 @@ package rs.qubit.fel.evaluator;
 import rs.qubit.fel.evaluator.value.Value;
 import rs.qubit.fel.exception.FilterException;
 import rs.qubit.fel.functions.*;
+import rs.qubit.fel.visitor.VisitorContext;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class DefaultEvaluationContext implements EvaluationContext {
+public class DefaultEvaluationContext implements VisitorContext {
 
     private final Map<String, FelFunction> functions;
     private final Map<Class<?>, FelMapperFunction> mappers;
