@@ -21,6 +21,8 @@ var filteredUsers = users
       .toList();
 ```
 
+`Fel.filter` method is used to create a filter predicate from the filter expression string. The resulting predicate can be applied to a stream of objects to filter the data based on the specified criteria.
+
 ## Installation
 
 To include FEL in your project, add the following dependency to your `pom.xml` if you are using Maven:
@@ -92,6 +94,18 @@ public class Main {
   }
 }
 ```
+
+`Fel.filter` method is used to create a filter predicate from the filter expression string. The resulting predicate can be applied to a stream of objects to filter the data based on the specified criteria.
+It creates a predicate that can be used with Java streams to filter a collection of objects based on the specified criteria.
+This means it can also be used to parallelize the filtering process using Java streams.
+
+```java
+var filteredUsers = users
+      .parallelStream()
+      .filter(Fel.filter("address.street = 'Main Street'"))
+      .toList();
+```
+
 
 ### Explanation
 
