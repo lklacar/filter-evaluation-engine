@@ -31,17 +31,16 @@ implementation 'rs.qubit:filter-expression-language:1.0.0'
 Here's a quick example to get you started with FEL:
 
 ```java
-package rs.qubit.filter;
+package rs.qubit.fel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.qubit.filter.engine.FilterEngine;
 
 import java.util.List;
 
-import static rs.qubit.filter.engine.FilterEngine.fel;
+import static rs.qubit.fel.engine.FilterEngine.fel;
 
 public class Main {
 

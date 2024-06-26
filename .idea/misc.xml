@@ -9,7 +9,7 @@
           <option name="outputDir" value="$PROJECT_DIR$/src/main/java" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
-          <option name="pkg" value="rs.qubit.filter.parser.generated" />
+          <option name="pkg" value="rs.qubit.fel.parser.generated" />
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
