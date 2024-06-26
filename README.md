@@ -46,31 +46,16 @@ implementation 'rs.qubit:filter-expression-language:1.0.0'
 Here's a quick example to get you started with FEL:
 
 ```java
-package rs.qubit.fel;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
-
-import static rs.qubit.fel.engine.FilterEngine.fel;
-
 public class Main {
 
   @Data
   @AllArgsConstructor
-  @NoArgsConstructor
-  @Builder
   static class Address {
     private String street;
   }
 
   @Data
   @AllArgsConstructor
-  @NoArgsConstructor
-  @Builder
   static class User {
     private String firstName;
     private String lastName;
@@ -80,9 +65,9 @@ public class Main {
   public static void main(String[] args) {
 
     var users = List.of(
-            User.builder().firstName("John").lastName("Doe").address(Address.builder().street("Wall Street").build()).build(),
-            User.builder().firstName("Jane").lastName("Doe").address(Address.builder().street("Wall Street").build()).build(),
-            User.builder().firstName("Alice").lastName("Smith").address(Address.builder().street("Main Street").build()).build()
+            new User("John", "Doe", new Address("Wall Street")),
+            new User("Jane", "Doe", new Address("Wall Street")),
+            new User("Alice", "Smith", new Address("Main Street"))
     );
 
     var filteredUsers = users
@@ -454,24 +439,10 @@ Consider a scenario where you want to filter users based on their date of birth.
 Here's how you can achieve this using a custom mapper:
 
 ```java
-package rs.qubit.fel;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import rs.qubit.fel.evaluator.value.DateTimeValue;
-
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.List;
-
 public class Main {
 
     @Data
     @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     static class User {
         private String firstName;
         private String lastName;
@@ -481,8 +452,8 @@ public class Main {
     public static void main(String[] args) {
 
         var users = List.of(
-                new User("John", "Doe", Instant.parse("1990-01-01T00:00:00Z")),
-                new User("Jane", "Doe", Instant.parse("1995-01-01T00:00:00Z"))
+              new User("John", "Doe", Instant.parse("1990-01-01T00:00:00Z")),
+              new User("Jane", "Doe", Instant.parse("1995-01-01T00:00:00Z"))
         );
 
         var predicate = Fel.filter("dateOfBirth = 1990-01-01T00:00:00")
@@ -531,22 +502,8 @@ By leveraging custom mappers, you can extend the functionality of FEL to handle 
 Suppose you have an `Order` class with a `deliveryDate` field of type `Instant`. You can use a custom mapper to filter orders based on their delivery date:
 
 ```java
-package rs.qubit.fel;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import rs.qubit.fel.evaluator.value.DateTimeValue;
-
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Builder
 class Order {
     private String orderId;
     private Instant deliveryDate;
@@ -581,22 +538,8 @@ public class Main {
 Consider an `Event` class with a `startTime` field of type `Instant`. Use a custom mapper to filter events based on their start time:
 
 ```java
-package rs.qubit.fel;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import rs.qubit.fel.evaluator.value.DateTimeValue;
-
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Builder
 class Event {
     private String eventName;
     private Instant startTime;
@@ -639,24 +582,10 @@ Filter Expression Language (FEL) also supports the usage of custom functions to 
 Consider a scenario where you want to filter users based on the uppercase version of their first names. You can use a custom function to achieve this:
 
 ```java
-package rs.qubit.fel;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import rs.qubit.fel.evaluator.value.NullValue;
-import rs.qubit.fel.evaluator.value.StringValue;
-
-import java.time.Instant;
-import java.util.List;
-
 public class Main {
 
     @Data
     @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     static class User {
         private String firstName;
         private String lastName;
@@ -815,25 +744,10 @@ Filter Expression Language (FEL) allows you to create a reusable evaluation cont
 Here's an example that demonstrates how to create a reusable evaluation context with a custom function and use it to filter a list of users.
 
 ```java
-package rs.qubit.fel;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import rs.qubit.fel.evaluator.context.DefaultEvaluationContext;
-import rs.qubit.fel.evaluator.value.NullValue;
-import rs.qubit.fel.evaluator.value.StringValue;
-
-import java.time.Instant;
-import java.util.List;
-
 public class Main {
 
     @Data
     @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     static class User {
         private String firstName;
         private String lastName;
