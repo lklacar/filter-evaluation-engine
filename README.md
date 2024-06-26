@@ -136,6 +136,100 @@ FEL expressions support a variety of operations to filter your data effectively.
 - **Logical OR:** `age < 20 || age > 60` - Filters objects where `age` is less than `20` or greater than `60`.
 - **Nested Fields:** `address.street = 'Main Street'` - Filters objects where `address.street` is `Main Street`.
 
+## Performance Considerations
+
+Filter Expression Language (FEL) is designed to be lightweight and efficient for filtering collections of objects. However, when working with large datasets or complex filter expressions, consider the following performance considerations:
+
+- **Filter Expression Complexity:** Complex filter expressions may impact performance, especially when they involve nested conditions or operations that require extensive computation. It's advisable to test and optimize filter expressions for performance-critical applications.
+
+- **Data Set Size:** While FEL is efficient for typical use cases, performance can vary with the size of the dataset being filtered. For large datasets, consider implementing pagination or batch processing to manage memory usage and improve performance.
+
+- **Testing and Benchmarking:** Before deploying FEL in production, conduct thorough testing and benchmarking to ensure that performance meets your application's requirements. Identify and optimize any bottlenecks that may arise from filter expression evaluation.
+
+By understanding these considerations and optimizing where necessary, you can leverage FEL effectively for filtering operations while maintaining optimal performance in your applications.
+
+Here's a section that includes examples with real-world data:
+
+## Examples with Real-World Data
+
+To demonstrate the versatility and practical application of Filter Expression Language (FEL), here are some examples using real-world data scenarios:
+
+### Filtering Users by Age and City
+
+Consider a scenario where you have a list of users with associated cities and ages. You can use FEL to filter users based on specific criteria:
+
+```java
+@Test
+void filterUsersByAgeAndCity() {
+    var users = List.of(
+            new User("John", 25, LocalDateTime.now(), new Address("Belgrade", "Nemanjina", 4)),
+            new User("Jane", 30, LocalDateTime.now(), new Address("Novi Sad", "Trg Slobode", 1)),
+            new User("Mark", 35, LocalDateTime.now(), new Address("Belgrade", "Knez Mihailova", 2)),
+            new User("Marko", 35, LocalDateTime.now(), new Address("Belgrade", "Knez Mihailova", 2))
+    );
+
+    var filter = Fel.filter("age >= 30 && address.city = 'Belgrade'");
+
+    var filteredUsers = users.stream().filter(filter).toList();
+
+    assertEquals(2, filteredUsers.size());
+    assertEquals("Mark", filteredUsers.get(0).getName());
+    assertEquals("Marko", filteredUsers.get(1).getName());
+}
+```
+
+### Filtering Products by Price and Stock Availability
+
+In an e-commerce application, you might want to filter products based on their price and availability status:
+
+```java
+@Test
+void filterProductsByPriceAndStock() {
+    var products = List.of(
+            new Product("Laptop", 1200.00, true),
+            new Product("Smartphone", 700.00, false),
+            new Product("Tablet", 300.00, true),
+            new Product("Monitor", 150.00, true)
+    );
+
+    var filter = Fel.filter("price < 500 && inStock = true");
+
+    var filteredProducts = products.stream().filter(filter).toList();
+
+    assertEquals(2, filteredProducts.size());
+    assertEquals("Tablet", filteredProducts.get(0).getName());
+    assertEquals("Monitor", filteredProducts.get(1).getName());
+}
+```
+
+### Filtering Users by Date of Creation
+
+Filtering users based on the date they were created can be essential for applications that manage user lifecycle:
+
+```java
+@Test
+void filterNewUsers() {
+    var now = LocalDateTime.now();
+    var users = List.of(
+            new User("Alice", 22, now.minusDays(1), new Address("Paris", "Rue de Rivoli", 7)),
+            new User("Bob", 28, now.minusMonths(6), new Address("Berlin", "Unter den Linden", 5)),
+            new User("Charlie", 35, now, new Address("London", "Baker Street", 221))
+    );
+
+    var filter = Fel.filter("createdAt > " + now.minusHours(3));
+
+    var filteredUsers = users.stream().filter(filter).toList();
+
+    assertEquals(1, filteredUsers.size());
+    assertEquals("Charlie", filteredUsers.get(0).getName());
+}
+```
+
+These examples showcase how FEL can be used to filter diverse datasets effectively, demonstrating its utility across different types of applications and scenarios.
+
+This section provides concrete examples using real-world data scenarios, demonstrating how FEL can be applied to filter users, products, and other entities based on various criteria.
+
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue to improve the library.
